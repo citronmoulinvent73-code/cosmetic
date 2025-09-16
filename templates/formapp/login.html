@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Cosme Vrai</title>
+    </head>
+    <body>
+        <header class="main-header">
+            <h1>Cosme Vrai</h1>
+        </header>
+        <h1>ログイン画面</h1>
+        <label for="username">ユーザー名</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">パスワード</label><br>
+        <input type="text" id="password" name="password"><br>
+        <input type="submit" value="ログイン"><br>
+
+        <a href="{% url 'form_app:register' %}">新規アカウント登録</a>
+    </body>
+</html>
+        
+        
