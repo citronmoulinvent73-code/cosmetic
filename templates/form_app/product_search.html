@@ -1,0 +1,28 @@
+<!--base.htmlを継承-->
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>商品検索</h1>
+
+<form method="get">
+    <input type="text" name="q"value="{{ query }}" placeholder="商品名で検索">
+    <button type="submit">検索</button>
+</form>
+
+{% if products is not None %}
+    {% if products %}
+        <ul>
+        {% for product in products %}
+            <li>
+                <a href="{% url 'form_app:review_create' product.id %}">
+                            {{ product.cosme_name }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>該当する商品がありません＊</p>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}

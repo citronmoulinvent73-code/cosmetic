@@ -1,0 +1,69 @@
+<!--base.htmlを継承-->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="product-page">
+        <h2>レビュー一覧</h2>
+
+        <a href ="{% url 'form_app:review_entry' %}" class="review-button">
+            ✍レビュー投稿
+        </a>
+    </div>
+
+    <div class="product-summary">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="product-detail-image">
+        {% endif %}
+
+        <div class="product-meta">
+            <h1 class="product-title">{{ product.cosme_name }}</h1>
+            <p class="product-price">￥{{ product.price }}</p>
+        </div>
+    </div>
+
+   
+{% if reviews %}
+    {% for review in reviews %}
+        <div class="review-card">
+            <strong>{{ review.user.username }}</strong><br>
+            
+            {% with review.rating as rate %}
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= rate %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                    <span class="rate">{{ rate }}</span>
+                </div>
+            {% endwith %}
+            
+            <!--♡-->
+            <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
+                {% csrf_token %}
+                <button class="favorite-btn">
+                    {% if review.is_favorited %}
+                        ♥
+                    {% else %}
+                        ♡
+                    {% endif %}
+                </button>
+            </form>
+
+            <span>{{ review.favorites.count }}</span>
+
+            良い点：{{ review.goodpoint_comment }}<br>
+            悪い点：{{ review.badpoint_comment }}<br>
+        </div>
+        <hr>
+    {% endfor %}
+
+{% else %}
+    <p>まだレビューはありません</p>
+{% endif %}
+
+{% endblock content %}    
