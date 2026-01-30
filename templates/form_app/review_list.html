@@ -6,6 +6,7 @@
 <h1>{{ user.username }}さんのレビュー一覧</h1>
 
 <div class="review-actions">
+    
     <a href ="{% url 'form_app:review_entry' %}" class="review-button">
         ✍レビュー投稿
     </a>
@@ -30,7 +31,7 @@
 
             <!--年代・肌質-->
             <div class="reivew-body">
-                <h2>{{ review.product.cosme_name }}</h2>
+                <h2>{{forloop.counter}}.  {{ review.product.cosme_name }}</h2>
                 
                 <p class="review-date">
                     {{ review.posted_at|date:"Y/m/d" }}

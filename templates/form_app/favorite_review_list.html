@@ -3,11 +3,18 @@
 
 {% block content %}
 
-<h1>お気に入りレビュー</h1>
+<h1>お気に入りレビュー一覧</h1>
 
 {% for fav in favorites %}
     <div class="review-card">
-        <h3>{{ fav.review.product.cosme_name }}</h3>
+        <h3>
+            {{forloop.counter}}.{{fav.review.product.cosme_name}}
+        </h3>
+
+        {% if fav.review.product.image %}
+            <img src="{{ fav.review.product.image.url }}" class="product-image">
+        {% endif %}
+
 
         <p class="rating">
             {% for i in "12345" %}
