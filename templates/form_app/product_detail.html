@@ -29,41 +29,44 @@
    
 {% if reviews %}
     {% for review in reviews %}
-        <div class="review-card">
-            <strong>{{ review.user.username }}</strong><br>
+        <div class="review-card review-detail">
+            <div class="review-main">
+                <strong>{{ review.user.username }}</strong><br>
             
-            {% with review.rating as rate %}
-                <div class="stars">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= rate %}
-                            ★
-                        {% else %}
-                            ☆
-                        {% endif %}
-                    {% endfor %}
-                    <span class="rate">{{ rate }}</span>
-                </div>
-            {% endwith %}
+                {% with review.rating as rate %}
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= rate %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                        <span class="rate">{{ rate }}</span>
+                    </div>
+                {% endwith %}
+                良い点：{{ review.goodpoint_comment }}<br>
+                悪い点：{{ review.badpoint_comment }}<br>
+            </div>
             
             <!--♡-->
-            {% if user.is_authenticated %}
-                <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
-                    {% csrf_token %}
-                    <button class="favorite-btn">
-                        {% if review.is_favorited %}
-                            ♥
-                        {% else %}
-                            ♡
-                        {% endif %}
-                    </button>
-                </form>
-                <span>{{ review.favorites.count }}</span>
-            {% else %}
-                <span>♥{{ review.favorites.count }}</span>
-            {% endif %}
-
-            良い点：{{ review.goodpoint_comment }}<br>
-            悪い点：{{ review.badpoint_comment }}<br>
+            <div class="favorite-area">
+                {% if user.is_authenticated %}
+                    <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="favorite-btn">
+                            {% if review.is_favorited %}
+                                ♥
+                            {% else %}
+                                ♡
+                            {% endif %}
+                        </button>
+                    </form>
+                    <span>{{ review.favorites.count }}</span>
+                {% else %}
+                    <span>♥{{ review.favorites.count }}</span>
+                {% endif %}
+            </div>
         </div>
         <hr>
     {% endfor %}

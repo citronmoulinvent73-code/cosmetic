@@ -15,6 +15,9 @@
             <img src="{{ fav.review.product.image.url }}" class="product-image">
         {% endif %}
 
+        <p class="review-user">
+            {{ fav.review.user.username }}さんのレビュー
+        </p>
 
         <p class="rating">
             {% for i in "12345" %}

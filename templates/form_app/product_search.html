@@ -2,22 +2,22 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>商品検索</h1>
-
-<form method="get">
-    <input type="text" name="q"value="{{ query }}" placeholder="商品名で検索">
-    <button type="submit">検索</button>
-</form>
+<h1>コスメ選択</h1>
 
 {% if products is not None %}
     {% if products %}
         <ul>
         {% for product in products %}
-            <li>
+        
+            <div class="product-card">
                 <a href="{% url 'form_app:review_create' product.id %}">
-                            {{ product.cosme_name }}
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="product-image">
+                    {% endif %}
+                    {{ product.cosme_name }}
                 </a>
-            </li>
+            </div>
+
         {% endfor %}
         </ul>
     {% else %}

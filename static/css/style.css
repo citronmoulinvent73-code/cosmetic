@@ -842,6 +842,40 @@ body{
     cursor: pointer;
 }
 
+.favorite-btn {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/*レビュー投稿する際の検索窓*/
+.review-search-form{
+    display: flex;
+    gap: 8px;
+}
+
+.review-search-form input[type="text"]{
+    width: 350px;
+    height: auto;
+    font-size: 15px;
+    padding: 0 12px;
+}
+
+
+.review-detail{
+    display: flex;
+    align-items: flex-start;
+}
+
+.review-detail .favorite-area{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+
 .review-card{
     padding: 16px 0;
     border-bottom: 1px dashed black; /*点線*/

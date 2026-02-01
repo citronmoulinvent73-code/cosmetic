@@ -7,14 +7,14 @@
 <!-- 新規レビュー＋検索フォーム -->
 <h2>✍ 新しくレビューを書く</h2>
 
-<form action="{% url 'form_app:product_search' %}" method="GET">
+<form action="{% url 'form_app:product_search' %}" method="GET"class="review-search-form">
     <input type="hidden" name="mode" value="review">
     <input
         type="text"
         name="q"
-        placeholder="商品名を入力"
+        placeholder="レビューするコスメの名称を検索"
         required>
-    <button type="submit">検索</button>
+    <button type="submit" class="search-button">🔍</button>
 </form>
 
 <hr>
