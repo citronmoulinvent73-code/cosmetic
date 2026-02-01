@@ -7,9 +7,12 @@
     <div class="product-page">
         <h2>レビュー一覧</h2>
 
-        <a href ="{% url 'form_app:review_entry' %}" class="review-button">
-            ✍レビュー投稿
-        </a>
+        {% if user.is_authenticated %}
+            <a href ="{% url 'form_app:review_entry' %}" class="review-button">
+                ✍レビュー投稿
+            </a>
+        {% endif %}
+
     </div>
 
     <div class="product-summary">
@@ -43,18 +46,21 @@
             {% endwith %}
             
             <!--♡-->
-            <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
-                {% csrf_token %}
-                <button class="favorite-btn">
-                    {% if review.is_favorited %}
-                        ♥
-                    {% else %}
-                        ♡
-                    {% endif %}
-                </button>
-            </form>
-
-            <span>{{ review.favorites.count }}</span>
+            {% if user.is_authenticated %}
+                <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="favorite-btn">
+                        {% if review.is_favorited %}
+                            ♥
+                        {% else %}
+                            ♡
+                        {% endif %}
+                    </button>
+                </form>
+                <span>{{ review.favorites.count }}</span>
+            {% else %}
+                <span>♥{{ review.favorites.count }}</span>
+            {% endif %}
 
             良い点：{{ review.goodpoint_comment }}<br>
             悪い点：{{ review.badpoint_comment }}<br>

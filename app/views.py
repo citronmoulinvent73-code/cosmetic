@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.views.decorators.http import require_POST
-from django.db.models import Count, Avg, Q, Exists, OuterRef, IntegerField
+from django.db.models import Count, Avg, Q, Exists, OuterRef, IntegerField, Value, BooleanField
 from django.db import models
 from django.db.models.functions import Cast, Round
 from django import forms
@@ -16,7 +16,7 @@ from .forms import LoginForm,UserForm,CosmeForm,ReviewForm, UserReadOnlyForm, Pr
 from .models import Product,Review,ReviewFavorite, Category, Profile
 
 
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         
@@ -40,18 +40,25 @@ def product_detail(request, pk):
     reviews = Review.objects.filter(
         product=product,
         is_draft=False
-        ).annotate(
+        )
+    
+    if request.user.is_authenticated:
+        reviews = reviews.annotate(
             is_favorited=Exists(
                 ReviewFavorite.objects.filter(
                     review=OuterRef("pk"),
                     user=request.user)
                 )
             )
+    else:
+        reviews = reviews.annotate(
+            is_favorited = Value(False, output_field=BooleanField())
+        )
     
     return render(
         request,
         'form_app/product_detail.html',
-        {'product':product,"reviews":reviews,})
+        {'product':product,"reviews":reviews})
     
     
 #product_detail、home、ranking（Reviewを取得するviewすべて）で同じannotateを使用
@@ -152,7 +159,6 @@ def ranking_view(request, category="skincare"):
                 )
 
 
-@login_required
 def home(request):
     products = Product.objects.annotate(
         avg_rating=Avg('reviews__rating'),
@@ -164,18 +170,27 @@ def home(request):
         .filter(avg_rating__isnull=False)
         .order_by('-avg_rating')[:5])
 
-    reviews = Review.objects.annotate(
-        is_favorited=Exists(
-            ReviewFavorite.objects.filter(
-                review=OuterRef("pk"),
-                user=request.user)
+    reviews = Review.objects.all()
+    
+    if request.user.is_authenticated:
+        reviews = reviews.annotate(
+            is_favorited=Exists(
+                ReviewFavorite.objects.filter(
+                    review=OuterRef("pk"),
+                    user=request.user)
+                )
             )
+    else:
+        reviews = reviews.annotate(
+            is_favorited = Value(False, output_field=BooleanField())
         )
+
     
     return render(
         request, 'form_app/home.html',
         {'products':products,
-         'ranking_products':ranking_products,})
+         'ranking_products':ranking_products,
+         'reviews':reviews})
     
 def register(request):
     if request.method == 'POST':
@@ -223,10 +238,9 @@ def category_product_list(request, category):
 
 
 #レビューお気に入り追加（トグル処理）
+@login_required
 def review_favorite(request, review_id):
-    if not request.user.is_authenticated:
-        return redirect("login")
-    
+   
     review=get_object_or_404(Review, id=review_id)
     
     favorite,created = ReviewFavorite.objects.get_or_create(
@@ -239,6 +253,7 @@ def review_favorite(request, review_id):
     return redirect(request.META.get("HTTP_REFERER","/"))
 
 #お気に入りタブ
+@login_required(login_url="login")
 def favorite_review_list(request):
     favorites = ReviewFavorite.objects.filter(
         user=request.user
@@ -493,6 +508,7 @@ def edit_profile(request): #プロフィール修正
  
     
 #レビュー投稿    
+@login_required
 def review_success(request):
     return render(request, 'form_app/review_success.html')
 

@@ -9,7 +9,7 @@
         {% if user.is_authenticated %}
             ようこそ、{{ user.username }}さん
         {% else %}
-            ゲストさん
+            ようこそ、ゲストさん
         {% endif %}
 
 <!--start 検索窓とか諸々追記-->
@@ -50,7 +50,6 @@
 
                 <div id="modalStars" class="stars"></div>
                 <a id="modalDetailLink" class="stars_link">口コミを見る</a>
-                <!--<a id="modalDetailButton" class="btn">商品詳細を見る</a>-->
 
             </div>
         </div>
@@ -59,9 +58,11 @@
         <div class="welcome-text"></div>   
 
         <div class="review-header">
-            <a href ="{% url 'form_app:review_entry' %}" class="review-button">
-                ✍レビュー投稿
-            </a>
+            {% if user.is_authenticated %}
+                <a href ="{% url 'form_app:review_entry' %}" class="review-button">
+                    ✍レビュー投稿
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}

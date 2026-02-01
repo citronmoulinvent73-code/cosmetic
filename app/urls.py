@@ -7,8 +7,8 @@ from .views import admin_my_page
 app_name = 'form_app'
 
 urlpatterns = [
-    path('', views.login, name='login'),
-    path('home/', views.home, name='home'),
+    path('', views.home, name='home'),
+    path('login/', views.login_view, name='login'),
     path('register/', views.register, name='register'),
     path('ranking/', views.ranking, name='ranking_all'),
     path('ranking/<str:category>/', views.ranking, name='ranking_by_category'),
