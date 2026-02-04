@@ -1,0 +1,42 @@
+<!--base.htmlを継承-->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}マイページ（運営ページ）{% endblock title %}
+
+{% block content %}
+    <div class="my-page-container">
+        <!--“ヘッダーはbase.htmlにつくる”-->
+
+        <h1 class="page-title">マイページ（運営ページ）</h1>
+
+        {% if user.is_staff %}
+         
+    <!--上段-->
+        <div class="button-list admin-top">
+            <a href="{% url 'form_app:edit_profile' %}" class="btn">👤登録情報の修正</a>
+            <a href="{% url 'form_app:password_change' %}" class="btn">🔒パスワード変更</a>
+        </div>
+
+    <!--中段-->
+        <div class="button-list admin-middle">
+            <a href="{% url 'form_app:product_create' %}" class="btn">💄コスメ登録</a>
+            <a href="{% url 'form_app:product_list' %}" class="btn">商品一覧（運営）</a>
+        </div>
+
+    <!--下段-->
+        <div class="review-header">
+            <a href="{% url 'form_app:review_list' %}" class="review-list-link">レビュー一覧</a>
+            <a href="{% url 'form_app:review_entry' %}" class="btn">✍レビュー投稿</a>
+        </div>
+
+    <!--最新レビュー表示スペース-->
+        <div class="latest-review-area">
+        </div>
+ 
+
+        {% else %}
+            <p>ログインしてください</p>
+        {% endif %}
+    </div>
+{% endblock content %}

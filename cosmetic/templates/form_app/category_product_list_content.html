@@ -1,0 +1,42 @@
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <div class="rank-num">{{ forloop.counter }}</div>
+
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="product-image">
+        {% endif %}
+
+        <h3>{{ product.cosme_name }}</h3>
+
+        {% if product.avg_rating %}
+        <div class="stars">
+
+            {% with product.avg_rating as avg %}
+
+            {% for i in "12345" %}
+                {% if forloop.counter <= avg %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+            {% endfor %}
+            <span class="avg">{{ avg|floatformat:1 }}</span>
+            {% endwith %}
+        </div>
+        {% else %}
+            <p class="no-review">レビューなし</p>
+        {% endif %}
+
+        <p>{{ product.review_count|default:0 }}件のレビュー</p>
+
+        <a href="{% url 'form_app:product_detail' product.id %}">
+            詳細をみる
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p>商品がありません。</p>
+{% endif %}
