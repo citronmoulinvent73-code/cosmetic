@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h1>お気に入りレビュー一覧</h1>
+
+{% for fav in favorites %}
+    <div class="review-card">
+        <h3>
+            {{forloop.counter}}.{{fav.review.product.cosme_name}}
+        </h3>
+
+        {% if fav.review.product.image %}
+            <img src="{{ fav.review.product.image.url }}" class="product-image">
+        {% endif %}
+
+        <p class="review-user">
+            {{ fav.review.user.username }}さんのレビュー
+        </p>
+
+        <p class="rating">
+            {% for i in "12345" %}
+                {% if forloop.counter <= fav.review.rating %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+            {% endfor %}
+            <span class="rating-number">
+                {{ fav.review.rating }}
+            </span>
+        </p>
+        
+        <p>良い点：{{ fav.review.goodpoint_comment|truncatechars:50 }}</p>
+        <p>悪い点：{{ fav.review.badpoint_comment|truncatechars:50 }}</p>
+
+    </div>
+{% empty %}
+    <p>お気に入りはまだありません</p>
+{% endfor %}
+
+{% endblock %}

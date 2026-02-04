@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}新規アカウント登録 ー Cosme Vrai{% endblock title %}
+
+{% block content %}
+<div class="registration-container">
+    <h2>新規アカウント登録</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="登録" class="registation-submit"><br>
+        <p class="login-link">
+            <a href="{% url 'form_app:login' %}">ログイン画面に戻る</a>
+        </p>
+    </form>
+</div>
+{% endblock content %}

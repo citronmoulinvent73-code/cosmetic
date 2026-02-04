@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="review-header">
+    <h1>レビュー投稿</h1>
+
+    <a href = "{% url 'form_app:review_draft_list' %}" class="btn">
+        📝一時保存したレビュー
+    </a>
+</div>
+
+<div class="product-box">
+    <div class="product-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.cosme_name }}" style="width:150px;">
+        {% endif %}
+    </div>
+
+    <div class="product-info">
+        <h2>{{ product.cosme_name }}</h2>
+        <p>カテゴリー：{{ product.category }}</p>
+        <p>価格：￥{{ product.price }}</p>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="rating-container">
+        <span class="rating-label">評価：</span>
+        
+        <!--エラーポップアップ-->
+        <script>
+            {% if form.rating.errors %}
+                alert("評価（★）を選択してください");
+            {% endif %}
+        </script>
+
+        <!--ラジオボタン-->
+        <div class="rating-options">
+            {% for value,label in form.rating.field.choices %}
+                {% if value != "" %}
+                    <label class="rating-item">
+                        <input type="radio" name="rating" value="{{ value }}">
+                        {{ label }}
+                    </label>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+          <!--レビューの画像選択-->
+        <div>
+            {{ form.image }}
+        </div>
+    </div>
+
+  
+    <p>
+        <label>良い点：</label><br>
+        {{ form.goodpoint_comment }}
+    </p>
+
+    <p>
+        <label>悪い点：</label><br>
+        {{ form.badpoint_comment }}
+    </p>
+
+    <div class="submit-actions">
+        <button type="submit" name="action" value="submit" class="btn-submit">
+            投稿
+        </button>
+        
+        <div class="submit-links">
+            <a href="{% url 'form_app:my_page' %}" class="link-cancel">
+                キャンセル
+            </a>
+
+            <button type="submit" name="action" value="draft" class="link-draft">
+                一時保存
+            </button> 
+        </div>
+    </div>
+</form>
+
+<script>
+    const input = document.querySelector('input[type="file"]');
+    const preview = document.getElementbyId('preview');
+
+    if(input){
+        input.addEventListener('change', function(){
+            const file = this.files[0];
+            if(file){
+                const render = new FileReader();
+                render.onload = function(e){
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                render.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+
+{% endblock %}

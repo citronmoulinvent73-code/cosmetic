@@ -1,0 +1,39 @@
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card" data-price="{{ product.price }}">
+
+        {% if show_rank %}
+        <div class="rank-num">{{ forloop.counter }}</div>
+        {% endif %}
+
+        {% if product.image %}
+            <a href="{% url 'form_app:product_detail' product.id %}">
+                <img src="{{ product.image.url }}" class="product-image">
+            </a>
+        {% endif %}
+
+        <div class="product-info">
+            <h3>
+                <a href="{% url 'form_app:product_detail' product.id %}">
+                    {{ product.cosme_name }}
+                </a>
+            </h3>
+
+            {% if product.avg_rating is not None %}
+            {% with product.avg_rating|default:0 as avg %}
+            <div class="stars">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= avg %}★{% else %}☆{% endif %}
+                {% endfor %}
+                <span class="avg">{{ avg|floatformat:1 }}</span>
+            </div>
+            {% endwith %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>{{ empty_message|default:"商品がありません。" }}</p>
+{% endif %}

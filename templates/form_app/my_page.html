@@ -1,0 +1,81 @@
+<!--base.htmlを継承-->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}マイページ{% endblock title %}
+
+{% block content %}
+    <div class="my-page-container">
+        <!--“ヘッダーはbase.htmlにつくる”-->
+
+        <h1 class="page-title">マイページ</h1>
+
+        {% if user.is_authenticated %}
+            <p>{{ user.username }}さん</p>
+
+
+    <!--中段-->
+            <div class="button-list middle">
+                <a href="{% url 'form_app:edit_profile' %}" class="btn">👤登録情報の修正</a>
+                <a href="{% url 'form_app:password_change' %}" class="btn">🔒パスワード変更</a>
+            </div>
+
+    <!--下段-->
+            <div class="review-header">
+                <a href="{% url 'form_app:review_list' %}" class="review-list-link">レビュー一覧</a>
+            
+            <!--　投稿ボタン➡商品一覧➡商品をクリック➡review_create(product_id)　-->
+                <a href="{% url 'form_app:review_entry' %}" class="btn">✍レビュー投稿</a>
+            </div>
+
+    <!--最新レビュー表示スペース-->
+            <div class="latest-review-area">
+
+    <!--レビュー一覧の表示-->
+                {% if reviews %}
+                    {% for review in reviews %}
+                        <div class="review-item">
+                            <div class="review-image">
+                                {% if review.image %}
+                                    <img src="{{ review.image.url }}" class="mypage-review-image">
+                                {% elif review.product.image %}
+                                    <img src="{{ review.product.image.url }}" class="mypage-review-image">
+                                {% endif %}
+                            </div>
+                            
+                            <div class=review-body>
+                                <h3>{{ review.product.cosme_name }}</h3>
+                        
+                                <p class="review-date">
+                                    {{ review.posted_at|date:"Y/m/d" }}
+                                </p>
+
+                                <p class="rating-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            ★
+                                        {% else %}
+                                            ☆
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+
+                                <p><strong>良い点</strong><br>
+                                    {{ review.goodpoint_comment|linebreaksbr }}
+                                </p>
+
+                                <p><strong>悪い点</strong><br>
+                                    {{ review.badpoint_comment|linebreaksbr }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>まだ投稿したレビューはありません。</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>ログインしてください</p>
+        {% endif %}
+    </div>
+{% endblock content %}

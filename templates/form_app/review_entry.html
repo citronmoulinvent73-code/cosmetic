@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}レビュー投稿{% endblock %}
+
+{% block content %}
+<h1>レビュー投稿</h1>
+
+<!-- 新規レビュー＋検索フォーム -->
+<h2>✍ 新しくレビューを書く</h2>
+
+<form action="{% url 'form_app:product_search' %}" method="GET"class="review-search-form">
+    <input type="hidden" name="mode" value="review">
+    <input
+        type="text"
+        name="q"
+        placeholder="レビューするコスメの名称を検索"
+        required>
+    <button type="submit" class="search-button">🔍</button>
+</form>
+
+<hr>
+
+<!-- 一時保存一覧 -->
+<h2>下書きから再開</h2>
+
+{% if drafts %}
+    <a href = "{% url 'form_app:review_draft_list' %}" class="btn">
+        📝一時保存したレビュー
+    </a>
+{% else %}
+    <p>一時保存したレビューはありません。</p>
+{% endif %}
+
+{% endblock %}
