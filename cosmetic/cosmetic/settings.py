@@ -24,7 +24,11 @@ SECRET_KEY = 'django-insecure-t)=*ajrubq(6g#_itcdz90nyk!+%4z)549)$a7)sqaio_!p*&x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True #本番環境ではFalseに修正
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'miharu.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
