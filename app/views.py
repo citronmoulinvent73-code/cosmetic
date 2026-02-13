@@ -19,10 +19,9 @@ from .models import Product,Review,ReviewFavorite, Category, Profile
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
-        
+               
         if form.is_valid():
             user = form.get_user()            
-            
             auth_login(request, user)
             return redirect(reverse('form_app:home'))
         

@@ -1,8 +1,9 @@
-from django.urls import path
+from django.urls import path,reverse_lazy
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
 from . import views
 from .views import admin_my_page
+from .forms import CustomPasswordChangeForm
 
 app_name = 'form_app'
 
@@ -20,9 +21,11 @@ urlpatterns = [
     path('password_change/', 
          auth_views.PasswordChangeView.as_view(
              template_name="form_app/password_change.html",
-             form_class=PasswordChangeForm,
-             success_url="/my_page/"),
-         name='password_change'),
+             form_class=CustomPasswordChangeForm,
+             success_url=reverse_lazy('form_app:my_page'),
+             ),
+         name='password_change',
+         ),    
 
     path('reviews/', views.review_list, name='review_list'),
     #レビュー投稿の入り口

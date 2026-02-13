@@ -7,7 +7,7 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">登録</button>
+    <button type="submit" class="btn btn-primary">登録</button>
 </form>
 
 {% endblock %}

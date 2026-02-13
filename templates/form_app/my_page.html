@@ -2,7 +2,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}マイページ{% endblock title %}
 
 {% block content %}
     <div class="my-page-container">
@@ -16,8 +15,8 @@
 
     <!--中段-->
             <div class="button-list middle">
-                <a href="{% url 'form_app:edit_profile' %}" class="btn">👤登録情報の修正</a>
-                <a href="{% url 'form_app:password_change' %}" class="btn">🔒パスワード変更</a>
+                <a href="{% url 'form_app:edit_profile' %}" class="btn btn-secondary">👤登録情報の修正</a>
+                <a href="{% url 'form_app:password_change' %}" class="btn btn-secondary">🔒パスワード変更</a>
             </div>
 
     <!--下段-->
@@ -25,7 +24,7 @@
                 <a href="{% url 'form_app:review_list' %}" class="review-list-link">レビュー一覧</a>
             
             <!--　投稿ボタン➡商品一覧➡商品をクリック➡review_create(product_id)　-->
-                <a href="{% url 'form_app:review_entry' %}" class="btn">✍レビュー投稿</a>
+                <a href="{% url 'form_app:review_entry' %}" class="btn btn-secondary">✍レビュー投稿</a>
             </div>
 
     <!--最新レビュー表示スペース-->
@@ -43,7 +42,7 @@
                                 {% endif %}
                             </div>
                             
-                            <div class=review-body>
+                            <div class="review-body">
                                 <h3>{{ review.product.cosme_name }}</h3>
                         
                                 <p class="review-date">

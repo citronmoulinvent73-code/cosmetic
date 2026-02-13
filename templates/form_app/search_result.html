@@ -5,38 +5,39 @@
 <h1>検索結果</h1>
 
 {% if query %}
-    {% for product in products %}
-        <div class="product-card">
-            <a href="{% url 'form_app:product_detail' product.id %}">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" class="product-image">
-                {% endif %}
-                {{ product.cosme_name }}
-            </a>
+    <div class="product-grid">
+        {% for product in products %}
+            <div class="product-card">
+                <a href="{% url 'form_app:product_detail' product.id %}">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="product-image">
+                    {% endif %}
+                    {{ product.cosme_name }}
+                </a>
 
-            {% with product.avg_rating|default:0|floatformat:0 as avg_int %}
-                <div class="stars">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= product.avg_rating_int %}
-                            ★
-                        {% else %}
-                            ☆
-                        {% endif %}
-                    {% endfor %}
-                    <span class="avg">
-                        {{ product.avg_rating|floatformat:1 }}
-                    </span>
-                </div>
-            {% endwith %}
+                {% with product.avg_rating|default:0|floatformat:0 as avg_int %}
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.avg_rating_int %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                        <span class="avg">
+                            {{ product.avg_rating|floatformat:1 }}
+                        </span>
+                    </div>
+                {% endwith %}
 
-            <p class="reivew-count">
-                {{ product.review_count }}件のレビュー
-            </p>
-
-        </div>
-    {% empty %}
-        <p>該当する商品がありません！</p>
-    {% endfor %}
+                <p class="reivew-count">
+                    {{ product.review_count }}件のレビュー
+                </p>
+            </div>
+        {% empty %}
+            <p>該当する商品がありません！</p>
+        {% endfor %}
+    </div>
 {% else %}
     <p>商品名を入力してください。</p>
 {% endif %}

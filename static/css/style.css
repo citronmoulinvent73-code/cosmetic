@@ -13,7 +13,12 @@ body{
     font-size: 14px; 
     padding: 10px;
     padding-top: 100px; /* ヘッダーの高さ、余白確保*/
-    /* padding-bottom: 100px; フッターの高さ、余白確保*/
+    padding-bottom: clac(80px + env(safe-area-inset-bottom)) ;
+}
+
+main.main-content{
+  min-height: calc(100dvh - 80px - 55px);
+  padding-bottom: 20px; 
 }
 
 .my-page-container{
@@ -40,7 +45,7 @@ body{
 
 .main-header h1 a {
     text-decoration: none;/*下線消す*/
-    font-size: 30spx;
+    font-size: 30px;
     color:black; 
     font-family: "Times New Roman";/*Yu Gothic*/
 }
@@ -130,16 +135,6 @@ body{
     display: block;
 }
 
-.registration-container form p input[type="text"],
-.registration-container form p input[type="email"],
-.registration-container form p input[type="password"],
-.registration-container form p selct{
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-
 .nav-item {
     flex-grow: 1;  /*均等貼り付け＋横並び*/
     text-align: center;  /*中央寄せ*/
@@ -156,7 +151,8 @@ body{
     display: flex;
     justify-content: space-between;/*左一覧リンク、右投稿ボタン*/
     align-items: center;
-    margin-bottom: 20px;
+    margin-top: 16px;
+    margin-bottom: 24px;
 }
 
 .review_date{
@@ -169,7 +165,9 @@ body{
     gap: 16px;
     align-items: flex-start;
     max-width: none;
+    margin-bottom: 24px;
 }
+
 
 .review-image img{
     width: 80px; /*画像サイズ確定*/
@@ -193,12 +191,6 @@ body{
     display: block;
 }
 
-.review-item{
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    align-items: flex-start;
-}
 
 .review-list-image{
     width: 30px;
@@ -208,15 +200,27 @@ body{
 }
 
 .review-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
     background-color: #bbc3bc;
-    padding: 10px 20px; /*ボタン余白*/
+    color: black;                 
+    text-decoration: none;       /* 下線消 */
+
+    padding: 12px 20px;
+    min-height: 44px;
+    font-size: 16px;
+    
     border-radius: 10px;
-    color: black;
-    text-decoration: none;
-    font-weight: bold; /*太文字*/
+    font-weight: bold;
     white-space: nowrap;
 }
 
+.review-button:hover{
+  background-color: gray;
+  color: black;
+}
 
 
 /*カテゴリのあとの　|　*/
@@ -241,9 +245,6 @@ body{
     padding: 10px 0; /*上下のパディングでタップしやすい高さ*/
 }
 
-body{
-    padding-bottom: 60px;
-}
 
 .icon{
     display: block;
@@ -255,17 +256,6 @@ body{
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-}
-
-
-/*登録ボタン修正*/
-.registation-submit{
-    background-color: #1e88fa;/*水色*/
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
 }
 
 .login-link{
@@ -306,26 +296,40 @@ body{
     margin: 20px 0 10px 0;
 }
 
+.form-input{
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.search-input{
+    width: 70%;
+    border: 2px solid #084b92;
+}
+
+
 .search-area{
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.search-input{
-    width: 70%;
-    padding: 10px;
-    border: 2px solid #084b92;
-    border-radius: 5px;
-    font-size:16px;
-}
-
 .search-button {
-    text-decoration: none;
-    background: none;
+       background: none;
     border: none;
     cursor: pointer;
-    padding: 5px;
+    font-size: 25px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 } 
 
 /*カテゴリ全体　→　リスト横並び*/
@@ -366,14 +370,6 @@ body{
         width: 100%;
     }
     
-    /* 中段:登録情報の修正・パスワード変更 */
-    .button-list.middle {
-        display: flex;
-        justify-content: center;
-        list-style: none;
-        gap: 20px;
-        margin-bottom: 40px;
-    }
 
 
     /* 下段 */
@@ -417,23 +413,66 @@ body{
     justify-content: flex-end;
 }
 
+
+/* マイページ2ボタン：狭くなったら縮むようにする */
+.button-list.middle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+    width: min(560px, 100%);   /* 画面に合わせて縮む */
+    margin: 24px auto;
+    padding: 0 12px;           /* 端の余白 */
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.button-list.middle > a.btn{
+    flex: 1 1 0;               /* 2つが均等に縮む */
+    min-width: 0;              /* 縮むようにする */
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;       /* 文字は折り返さない */
+    overflow: hidden;
+    text-overflow: ellipsis;   /* どうしても狭い時は、省略 */
+}
+
+
+@media(max-width: 360px){
+    .button-list.middle{
+        flex-direction: column;
+        max-width: 320px;
+    }
+    .button-list.middle .btn{
+        width: 100%;
+        min-width: 0;
+    }}
+
+
 .button-list.bottom{
     justify-content: space-between;
 }
 
-.btn{
-    display:  inline-block;
-    background-color: #bbc3bc;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
+a.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;          /* 押しやすさの下限 */
+  padding: 10px 16px;        /* 横だけ縮むように */
+  font-size: 15px;           /* 下げすぎない */
+  line-height: 1.2;          /* 文字の上下の“見た目余白”を減らす */
+
+  border-radius: 10px;
+  white-space: nowrap;
 }
 
+
 .btn:hover{
-    background-color: #bbc3bc;
+    background-color: gray;
 }
 
 
@@ -457,6 +496,20 @@ body{
     margin: 16px 0 24px;
 }
 
+@media (max-width: 900px){
+    body{
+        padding-bottom: clac(80px + env(safe-area-inset-bottom));
+    }
+    main.main-content{
+        padding-bottom: 20px;
+    }
+    .btn{
+        font-size:  15px;
+        padding: 10px 16px;
+        min-height: 44px; /*下限は維持*/
+    }
+}
+
 
 /*　マイページ　スマホ用ボタンレイアウト　*/
 @media screen and (max-width: 600px){
@@ -464,6 +517,7 @@ body{
         font-size: 14px;
         padding: 10px;
         padding-top:  80px;/*ヘッダー予約*/
+        padding-bottom: 80px;
     }
 
     .logout-erea {
@@ -499,12 +553,19 @@ body{
     /* 登録情報の変更・パスワードの変更　縦並び */
     .button-list.middle {
         display: flex;
-        flex-direction: column; /*横　⇒　縦*/
-        align-items: center;/*　中央寄せ　*/
+        align-items: stretch;/*　横幅をそろえる　*/
         list-style: none;
         gap: 10px;
         margin-bottom: 30px;
     }
+    .button-list.middle .btn{
+        width: 100%;          /* ←重要：細長さ解消 */
+        min-height: 44px;
+        font-size: 15px;
+        padding: 10px 16px;
+        text-decoration: none;
+    }    
+
 
 
     /* レビュー投稿　中央寄せ（スマホでは右寄せだと狭い） */
@@ -516,10 +577,10 @@ body{
     }
 
     /* 共通ボタンデザイン（大きめ）*/
-    .btn {
+    a.btn {
         display: inline-block;
         text-align: center;
-        padding: 10px 0;
+        padding: 10px 14px;
         border-radius: 6px;
         font-size: 14px;
     }
@@ -718,7 +779,7 @@ body{
     align-items: center;
     gap: 16px;
 
-    border: 1px solid ;
+    border: 1px solid black;
     padding: 10px;
     border-radius: 10px;
 }
@@ -840,9 +901,6 @@ body{
     border: none;
     font-size: 18px;
     cursor: pointer;
-}
-
-.favorite-btn {
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -906,3 +964,68 @@ body{
 .btn-primary:hover {
   background-color: #1565c0;  /* 少し濃い青 */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== ボタン共通（見た目） ===== */
+a.btn, a.btn:visited{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #bbc3bc;
+  color: #000;
+  text-decoration: none;
+
+  min-height: 44px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* ===== マイページ中段（配置） ===== */
+.button-list.middle{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  max-width: 560px;
+  margin: 24px auto;
+  padding: 0;
+  list-style: none;
+}
+
+/* ボタン幅は“ほどよく”揃える（任意） */
+.button-list.middle > a.btn{
+  min-width: 220px;
+}
+
+/* ===== 超狭い時だけ縦 ===== */
+@media (max-width: 360px){
+    a.btn{
+        font-size: 13px;
+        padding: 9px 12px;
+    }
+    .button-list.middle{
+        flex-direction: column;
+    }
+    .button-list.middle > a.btn{
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+
+

@@ -30,7 +30,7 @@
 <div class="container">
     <h2>ログイン</h2>
 
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
 
         {% if form.errors %}
@@ -39,7 +39,7 @@
 
         {{ form.as_p }}
 
-        <button type="submit" class="btn btn-primary login-submit">ログイン</button>
+        <button type="submit" class="btn btn-primary">ログイン</button>
 
         <p class="mt-3">
             アカウントをお持ちでないですか？新規登録は<a href="{% url 'form_app:register' %}">こちら</a>

@@ -7,7 +7,7 @@
 <div class="review-header">
     <h1>レビュー投稿</h1>
 
-    <a href = "{% url 'form_app:review_draft_list' %}" class="btn">
+    <a href = "{% url 'form_app:review_draft_list' %}" class="btn btn-secondary">
         📝一時保存したレビュー
     </a>
 </div>
@@ -87,7 +87,7 @@
 
 <script>
     const input = document.querySelector('input[type="file"]');
-    const preview = document.getElementbyId('preview');
+    const preview = document.getElementById('preview');
 
     if(input){
         input.addEventListener('change', function(){

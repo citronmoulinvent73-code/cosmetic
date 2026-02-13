@@ -10,7 +10,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="登録" class="registation-submit"><br>
+        <button type="submit" class="btn btn-primary">登録</button><br>
         <p class="login-link">
             <a href="{% url 'form_app:login' %}">ログイン画面に戻る</a>
         </p>

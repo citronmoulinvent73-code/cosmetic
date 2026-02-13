@@ -16,7 +16,7 @@
         <h1 class="section-title">コスメ検索</h1>
 
         <form action="{% url 'form_app:product_search' %}" method="GET" class="search-area">
-            <input type="text" name="q" class="search-input" placeholder="コスメの名称を入力">
+            <input type="text" name="q" class="form-input search-input" placeholder="コスメの名称を入力">
             <button type="submit" class="search-button">🔍</button>
         </form>
 
@@ -33,6 +33,13 @@
             </ul>
         </div>
 
+        <div class="review-header">
+            {% if user.is_authenticated %}
+                <a href ="{% url 'form_app:review_entry' %}" class="btn btn-secondary">
+                    ✍レビュー投稿
+                </a>
+            {% endif %}
+        </div>
 
         <h2 class="section-title">総合ランキング</h2>
 
@@ -57,13 +64,6 @@
         <!--end 検索窓とか諸々追記-->
         <div class="welcome-text"></div>   
 
-        <div class="review-header">
-            {% if user.is_authenticated %}
-                <a href ="{% url 'form_app:review_entry' %}" class="review-button">
-                    ✍レビュー投稿
-                </a>
-            {% endif %}
-        </div>
     </div>
 {% endblock content %}
 

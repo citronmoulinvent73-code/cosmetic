@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Cosme Vrai</title>
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <link rel="preconnect" href="https://fonts.googlepis.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/CSS2?family=Playfair+Display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
     </head>
     
     <body class="{% block body_class %}{% endblock %}">    
@@ -19,9 +19,9 @@
             </h1>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'form_app:logout' %}"class="header-logout-btn" onclick="return confirm('ログアウトしますか？')">ログアウト</a>
+                <a href="{% url 'form_app:logout' %}" class="btn btn-secondary btn-sm" onclick="return confirm('ログアウトしますか？')">ログアウト</a>
             {% else %}
-                <a href="{% url 'form_app:login' %}"class="header-logout-btn">ログイン</a>            
+                <a href="{% url 'form_app:login' %}" class="btn btn-primary btn-sm">ログイン</a>            
             {% endif %}
         </header>
     
@@ -49,9 +49,15 @@
                 </li>
                 <li class="nav-item">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'form_app:favorite_review_list' %}" class="nav-link">♡<br>お気に入り</a>
+                        <a href="{% url 'form_app:favorite_review_list' %}" class="nav-link">
+                            <span class ="emoji">♡</span>
+                            <span>お気に入り</span>
+                        </a>
                     {% else %}
-                        <a href="{% url 'form_app:login' %}?next={% url 'form_app:favorite_review_list' %}">♡<br>お気に入り</a>
+                        <a href="{% url 'form_app:login' %}?next={% url 'form_app:favorite_review_list' %}" class="nav-link">
+                            <span class ="emoji">♡</span>
+                            <span>お気に入り</span>
+                        </a>
                     {% endif %}   
                 </li>                          
 
@@ -60,15 +66,24 @@
                     {% if user.is_authenticated %}
                         {% if user.is_staff %}
                             <!--管理者-->
-                            <a class="nav-link text-center" href="{% url 'form_app:admin_my_page'%}">👤<br>運営ページ</a>
+                            <a class="nav-link text-center" href="{% url 'form_app:admin_my_page'%}">
+                                <span class ="emoji">👤</span>
+                                <span>運営ページ</span>
+                            </a>
                         {% else %}
                             <!--一般ユーザー-->
-                            <a class="nav-link text-center" href="{% url 'form_app:my_page' %}">👤<br>マイページ</a>
+                            <a class="nav-link text-center" href="{% url 'form_app:my_page' %}">
+                                <span class ="emoji">👤</span>
+                                <span>マイページ</span>
+                            </a>
                         {% endif %}
                     
                     {% else %}
                         <!--未ログイン-->    
-                        <a class="nav-link text-center" href="{% url 'form_app:login' %}">ログイン</a>
+                        <a class="nav-link text-center" href="{% url 'form_app:login' %}">
+                            <span class ="emoji">👤</span>
+                            <span>ログイン</span>
+                        </a>
                     {% endif %}
                 </li>
             </ul>

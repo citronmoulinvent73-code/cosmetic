@@ -22,7 +22,6 @@ def login_view(request):
         
         if form.is_valid():
             user = form.get_user()            
-            
             auth_login(request, user)
             return redirect(reverse('form_app:home'))
         

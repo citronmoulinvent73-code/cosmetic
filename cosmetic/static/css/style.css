@@ -1,824 +1,639 @@
+/* =========================
+   Base / Variables
+========================= */
+:root{
+  --header-h: 80px;
+  --footer-h: 55px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --text: #4b4b4b;
+  --bg-pink-beige: #f4dcd6;
+  --header-bg: #e4b4f2;
+  --footer-bg: #f8f5f6;
+
+  --btn-bg: #bbc3bc;
+}
+
+/* =========================
+   Global
+========================= */
 h1{
-    color: pinkbeige;
+  color: #d8a7a0; /* pinkbeige は無効なので置換 */
 }
+
 .bg-pink-beige{
-    background-color: #f4dcd6;
+  background-color: var(--bg-pink-beige);
 }
+
 .navbar-pink-beige .nav-link{
-    color: #4b4b4b;
+  color: var(--text);
 }
 
-/*　　PC用サイズ設定　　*/
 body{
-    font-size: 14px; 
-    padding: 10px;
-    padding-top: 100px; /* ヘッダーの高さ、余白確保*/
-    /* padding-bottom: 100px; フッターの高さ、余白確保*/
+  font-size: 14px;
+  padding: 10px;
+  padding-top: var(--header-h); /* 固定ヘッダー分 */
+  padding-bottom: calc(var(--footer-h) + var(--safe-bottom)); /* ← calc に修正 */
+  box-sizing: border-box;
 }
 
-.my-page-container{
-    width: 100%;
+main.main-content{
+  min-height: calc(100dvh - var(--header-h) - var(--footer-h));
+  padding-bottom: 20px;
 }
 
-/*ヘッダー　左タイトル、右ログアウト*/
-.main-header {
-    display: flex;
-    justify-content: space-between;  
-    align-items: center;
-    padding: 0 40px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px; /*高さ固定*/
-    background-color: #e4b4f2 ; /* パステルパープル色 */
-    color: white;
-    /*bfont-family: Arial, sans-serif; */
-    box-sizing: border-box;
-    z-index: 1000;
+.my-page-container {
+  width: 100%;
 }
 
-.main-header h1 a {
-    text-decoration: none;/*下線消す*/
-    font-size: 30spx;
-    color:black; 
-    font-family: "Times New Roman";/*Yu Gothic*/
+.my-page-container .page-title{
+  color: #d8a7a0;
 }
 
-/* ヘッダー　ログイン・ログアウトボタン含む */
-.header-logout-btn {
-    margin-left: auto;
-    background-color: #bbc3bc;
-    text-decoration: none;
-    padding: 8px 12px;
-    font-size: 16px;
-    white-space: nowrap;/*折り返し防止 */
-    display: inline-block;
-    border-radius: 6px;
-}
-
-
-/* ページタイトルの中央配置 */
 .page-title{
-    text-align: center;
-    font-size: 24px;
-    margin: 30px 0 40px;
-    color: #4b4b4b;
-    font-family: "Yu Gothic", sans-serif;
+  text-align: center;
+  font-size: 24px;
+  margin: 30px 0 40px;
+  color: var(--text);
+  font-family: "Yu Gothic", sans-serif;
 }
 
+/* =========================
+   Header
+========================= */
+.main-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-/* フッターナビゲーション通常：Flexbox */
-.mobile-footer-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color:#f8f5f6;
-    border-top: 1px solid #d6f4d9;
-    z-index: 1000; /*最前面に表示*/
+  padding: 0 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: var(--header-h);
+
+  background-color: var(--header-bg);
+  color: white;
+
+  box-sizing: border-box;
+  z-index: 1000;
 }
 
-/* Flexbox有効化、横並び及び均等配置に設定　*/
-.nav-list{   
-    /*横並び*/
-    display: flex;
-    justify-content: space-around;
-
-    list-style: none;
-    margin:0;
-    padding:0;
-    height:55px;
-
-    font-size: 10px;
-    width: 100%;
-    height:100%;
+.main-header h1 a{
+  text-decoration: none;
+  font-size: 30px;
+  color: #000;
+  font-family: "Times New Roman";
 }
 
-/*　絵文字だけ大きくする */
-.nav-link.emoji{
-    font-size: 50px;
-    line-height: 3;
-    display: block;
+/* =========================
+   Footer Nav
+========================= */
+.mobile-footer-nav{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+
+  background-color: var(--footer-bg);
+  border-top: 1px solid #d6f4d9;
+  z-index: 1000;
 }
 
-/*フッターの基本リンク*/
-.mobile-footer-nav .nav-list a {
-    display:  flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;/*下線削除*/
-    color: rgb(14, 7, 7);/*リンクのデフォルト色*/
-    width: 100%;
-    height: 100%
+.nav-list{
+  display: flex;
+  justify-content: space-around;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  height: var(--footer-h);
+  width: 100%;
+  font-size: 10px;
 }
 
-/*フッターにカーソル当てた時*/
-.mobile-footer-nav .nav-list a:hover {
-    background-color: #d74576 ;
-    color: white;
+.nav-item{
+  flex-grow: 1;
+  text-align: center;
 }
 
-/*フッターをクリックした時*/
-.mobile-footer-nav .nav-list a:active {
-    background-color: #cc7592 ;
-    transform: translateY(1px);
+/* フッターのリンク */
+.mobile-footer-nav .nav-list a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+  color: rgb(14, 7, 7);
+  width: 100%;
+  height: 100%;
 }
 
-
-.registration-container form p label{
-    display: block;
+.mobile-footer-nav .nav-list a:hover{
+  background-color: #d74576;
+  color: #fff;
 }
 
-.registration-container form p input[type="text"],
-.registration-container form p input[type="email"],
-.registration-container form p input[type="password"],
-.registration-container form p selct{
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
+.mobile-footer-nav .nav-list a:active{
+  background-color: #cc7592;
+  opacity: 0.8;
 }
 
-
-.nav-item {
-    flex-grow: 1;  /*均等貼り付け＋横並び*/
-    text-align: center;  /*中央寄せ*/
-} 
-
-.action-row{
-    display: flex;
-    gap: 12px;
-    margin: 20px 0;
-}
-
-/*レビュー画面ヘッダー*/
-.review-header{
-    display: flex;
-    justify-content: space-between;/*左一覧リンク、右投稿ボタン*/
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.review_date{
-    font-size:12px;
-    color:black;
-}
-
-.review-item{
-    display: flex; /*画像と本文横並び*/
-    gap: 16px;
-    align-items: flex-start;
-    max-width: none;
-}
-
-.review-image img{
-    width: 80px; /*画像サイズ確定*/
-    height: 60px; 
-}
-
-.review-body{
-    display: block; /*中身は縦並び*/
-}
-
-
-/*一時保存レビューボタン*/
-.draft-button{
-    font-size: 14px;
-    color: #5aa7c8;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.review-list{
-    display: block;
-}
-
-.review-item{
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    align-items: flex-start;
-}
-
-.review-list-image{
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-    flex-shrink: 0px;
-}
-
-.review-button{
-    background-color: #bbc3bc;
-    padding: 10px 20px; /*ボタン余白*/
-    border-radius: 10px;
-    color: black;
-    text-decoration: none;
-    font-weight: bold; /*太文字*/
-    white-space: nowrap;
-}
-
-
-
-/*カテゴリのあとの　|　*/
-.category-list li::after{
-    content:"|";
-    margin: 0 8px;
-}
-
-.category-list li:last-child::after{
-    content:"";
-}
-
-
+/* 既存の nav-link（縦並び） */
 .nav-link{
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    text-decoration: none; /*下線削除*/
-    color: #4b4b4b; 
-    padding: 10px 0; /*上下のパディングでタップしやすい高さ*/
+  text-decoration: none;
+  color: var(--text);
+  padding: 10px 0;
 }
 
-body{
-    padding-bottom: 60px;
+/* 絵文字だけ大きくする */
+.nav-link.emoji{
+  font-size: 50px;
+  line-height: 3;
+  display: block;
 }
 
 .icon{
-    display: block;
-    width: 24px;
-    height: 24px;
-    margin-bottom: 2px;
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
 
-    /*アイコン実態の指定 */
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+/* =========================
+   Buttons (Unified)
+========================= */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  font-size: clamp(13px, 3.6vw, 15px);
+  line-height: 1.2;
+
+  border: none;
+  cursor: pointer;
 }
 
 
-/*登録ボタン修正*/
-.registation-submit{
-    background-color: #1e88fa;/*水色*/
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
+/* スリムなボタン（ログアウトボタン） */
+.btn-sm{
+    min-height: 32px;
+    padding: 8px 12px;
     font-size: 16px;
+  }
+
+
+/* マイページ：ボタンリスト共通 */
+.button-list{
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  gap: 20px;
 }
 
-.login-link{
-    color: #1e88fa;
+.button-list li{ width: auto; }
+
+/* 上段（ログアウト） */
+.button-list.top{
+  justify-content: flex-end;
+  margin-top: -60px;
+  margin-right: 30px;
 }
 
-/*ログインボタン修正*/
+/* 下段（レビュー投稿） */
+.button-list.bottom{
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+
+/* ★ここが統一版：中段2ボタン（小さくなっても崩れにくい） */
+.button-list.middle{
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  flex-wrap: nowrap;             /* 狭いとき折り返し */
+  width: min(560px, 100%);
+  margin: 24px auto;
+  padding: 0 12px;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+.button-list.middle > .btn{
+  flex: 1;             /* 均等に２分割 */
+  min-width: 0;
+  white-space: normal;         /* ★文字は折り返しOK */
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+
+/* =========================
+   Forms / Links
+========================= */
+.registration-container form p label{
+  display: block;
+}
+
+.login-link{ color: #1e88fa; }
+
 .login-submit{
-    background-color: #1e88fa;/*水色*/
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #1e88fa;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
 }
-/*クリック時色が変わる*/
-.login-submit:hover {
-    background-color: #084b92;
+.login-submit:hover{ background-color: #084b92; }
+
+.link-like,
+.link-btn{
+  background: none;
+  border: none;
+  color: #1e88fa;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
 }
 
+.separator{
+  margin: 0 8px;
+  color: var(--text);
+}
 
-/* ↓　@@@@@@@ 検索窓とか諸々追記 */
+/* =========================
+   Home / Search / Category
+========================= */
 .home-container{
-    width: 90%;
-    margin: 0 auto;
-    padding-top: 0px;
-    font-family: "Yu Gothic";
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 0px;
+  font-family: "Yu Gothic";
 }
 
 .welcom-text{
-    font-size: 18px;
-    margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .section-title{
-    font-size: 20px;
-    font-weight: bold;
-    margin: 20px 0 10px 0;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px 0 10px 0;
 }
 
+.form-input{
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* 送信後（ユーザーがエラーを起こした後）だけ赤くする */
+.form-input:user-invalid{
+  border: 1px solid #d93025;
+  background-color: #fff6f6;
+}
+
+/* ファイル入力だけ別 */
+input[type="file"].form-input {
+    height: auto;
+    padding: 6px;
+}
+
+/* fileボタンが窮屈なら */
+input[type="file"].form-input::-webkit-file-upload-button{
+  margin-right: 10px;
+  padding: 6px 10px;
+  border: 1px solid #000;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+
 .search-area{
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .search-input{
-    width: 70%;
-    padding: 10px;
-    border: 2px solid #084b92;
-    border-radius: 5px;
-    font-size:16px;
+  width: 70%;
+  border: 2px solid #084b92;
 }
 
-.search-button {
-    text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-} 
+.search-button{
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 25px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
 
-/*カテゴリ全体　→　リスト横並び*/
-.category-container {
-    margin:10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.category-container{ margin: 10px 0; }
 
 .category-list{
-    list-style:none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .category-list li a{
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
 }
 
 .category-list li a:hover{
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* ↑　@@@@@@@ 検索窓とか諸々追記 */
+/* カテゴリの後ろの | */
+.category-list li::after{
+  content: "|";
+  margin: 0 8px;
+}
+.category-list li:last-child::after{ content: ""; }
 
-@media screen and (min-width: 1024px){
-    body{
-        font-size : 16px;
-        /*pc全画面表示では、固定ヘッダー・フッターの余白を設定*/
-        padding: 20px; /*全辺の余白*/
-        padding-top: 100px; /*ヘッダーの余白*/
-        padding-bottom: 100px; /*フッターの余白*/
-    }
-    .my-page-container{
-        width: 100%;
-    }
-    
-    /* 中段:登録情報の修正・パスワード変更 */
-    .button-list.middle {
-        display: flex;
-        justify-content: center;
-        list-style: none;
-        gap: 20px;
-        margin-bottom: 40px;
-    }
-
-
-    /* 下段 */
-    .button-list.bottom{
-        display: flex;
-        justify-content: flex-end;
-        list-style: none;
-        width: 100%;
-    }
-
-    .button-list.top{
-        justify-content: center;/*ログアウト中央よせ*/
-    }
-    .btn{
-        text-align: center;/*ボタン幅を広くする*/
-    }
-
+/* =========================
+   Review (List/Detail)
+========================= */
+.review-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 24px;
 }
 
-
-/*　マイページ用ボタン配置
-　　～ｐｃスマホ共通～　*/
-
-.button-list{
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 20px auto;
-    gap: 20px;
+.review_date{
+  font-size: 12px;
+  color: #000;
 }
 
-.button-list li{
-    width: auto; /*幅maxのボタンを解除*/
+.review-item{
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: none;
+  margin-bottom: 24px;
 }
 
-.button-list .btn{
-    width: auto;
+.review-image img{
+  width: 80px;
+  height: 60px;
 }
 
-.button-list.top{
-    justify-content: flex-end;
+.review-body{ display: block; }
+
+.review-list{ display: block; }
+
+.review-list-image{
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
-.button-list.bottom{
-    justify-content: space-between;
+/* 一時保存した商品画像 */
+.draft-review-image{
+    width: 100%;
+    max-width: 180px;   /* 表示上限 */
+    height: auto;       /* 縦横比維持 */
+    display: block;
+    margin: 0 auto 12px;
 }
 
-.btn{
-    display:  inline-block;
-    background-color: #bbc3bc;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
+/* お気に入りボタン（重複を統一） */
+.favorite-btn{
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.btn:hover{
-    background-color: #bbc3bc;
+.review-detail{
+  display: flex;
+  align-items: flex-start;
+}
+.review-detail .favorite-area{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-
-/*上段:ログアウト */
-.button-list.top{
-    justify-content: flex-end;
-    margin-top: -60px;
-    margin-right: 30px;
+.review-card{
+  padding: 16px 0;
+  border-bottom: 1px dashed #000;
 }
+.review-card:last-child{ border-bottom: none; }
 
-/* 下段：レビュー投稿 */
-.button-list.bottom{
-    justify-content: flex-end;
-    margin-right: 30px;
+.rating{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+}
+.rating-number{
+  font-size: 14px;
+  color: #000;
 }
 
 .review-actions{
-    display: flex;
-    justify-content: flex-end; /*右寄せ*/
-    gap: 12px; /*ボタン間隔*/
-    margin: 16px 0 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 16px 0 24px;
 }
 
-
-/*　マイページ　スマホ用ボタンレイアウト　*/
-@media screen and (max-width: 600px){
-    body {
-        font-size: 14px;
-        padding: 10px;
-        padding-top:  80px;/*ヘッダー予約*/
-    }
-
-    .logout-erea {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-    }
-
-    .logout-btn {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-
-    /* マイページ　タイトル中央寄せ */
-    .page-title {
-        text-align: center;
-        font-size: 20px;
-        margin: 20px 0 25px;
-    }
-    /*マイページのレビュー画像*/
-    .mypage-review-image{
-        width: 30px;
-        height: 30px;
-        object-fit: cover;
-        flex-shrink: 0; /*flex内での拡大を防*/
-    }
-
-    .rating-stars{
-        color: black;
-        font-size: 14px;
-    }
-
-    /* 登録情報の変更・パスワードの変更　縦並び */
-    .button-list.middle {
-        display: flex;
-        flex-direction: column; /*横　⇒　縦*/
-        align-items: center;/*　中央寄せ　*/
-        list-style: none;
-        gap: 10px;
-        margin-bottom: 30px;
-    }
-
-
-    /* レビュー投稿　中央寄せ（スマホでは右寄せだと狭い） */
-    .button-list.bottom {
-        display: flex;
-        justify-content: center;
-        list-style: none;
-        margin: 0 auto;
-    }
-
-    /* 共通ボタンデザイン（大きめ）*/
-    .btn {
-        display: inline-block;
-        text-align: center;
-        padding: 10px 0;
-        border-radius: 6px;
-        font-size: 14px;
-    }
-
-/**/
-    .product-box{
-        display: flex;
-        gap: 20px;
-        border: 1px solid blue;
-        padding: 15px;
-        margin-bottom: 20px;
-        align-items: flex-start;
-    }
-
-    .product-image img{
-        width: 220px;
-        height: auto;
-        object-fit: cover;
-        border-radius: 6px;
-    }
-
-    .product-info h2 {
-        margin-top: 0;
-    }
-
-
-/*「評価：」の全体を横並び*/
-    .rating-container{
-        display: flex;
-        align-items: flex-start; /*上の端揃える*/
-        gap: 20px;
-    } 
-
-    .rating-label{
-        white-space: nowrap;
-        font-weight: bold;
-    }
-
-
-/*「評価：」ラジオボタンで縦並び*/
-    .rating-options{
-        display: flex;
-        flex-direction: column; /*縦並び*/
-        gap: 6px;
-    } /*ラジオボタンの間隔*/ 
-
-
-    .rating-item{
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .rating-item-box{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        border: 1px dashed #d74576;
-        padding: 12px;
-        width: 140px;
-        height: 140px;
-        justify-content: center;
-    }
-
-    .image-label{
-        font-size: 14px;
-        margin-bottom: 6px;
-    }
-   
-    .link-like{
-        background: none;
-        border: none;
-        color: #007bff;
-        text-decoration: underline;
-        cursor: pointer;
-        padding: 0;
-    }
-
-
-    .review-sub-actions{
-        margin-top: 12px;
-        text-align: center;
-        font-size: 14px;
-    }
-
-
-    .link-btn{
-        background: none;
-        border: none;
-        color: #1e88fa;
-        text-decoration: underline;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-   
-    .separator{
-        margin: 0 8px;
-        color:#4b4b4b
-    }
-
-    
-/*カテゴリ別商品一覧*/
-    .product-image{
-        height: 120px;
-    }
+/* レビュー投稿の検索窓 */
+.review-search-form{
+  display: flex;
+  gap: 8px;
+}
+.review-search-form input[type="text"]{
+  width: 300px;
+  font-size: 15px;
+  padding: 0 12px;
 }
 
-
-
-/*管理ページ　上段:ボタン */
-.button-list.admin-top,
-.button-list.admin-middle{
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
-    list-style:none;
-    padding-left: 0;
-}
-
-
-.button-list.admin-top .btn,
-.button-list.admin-middle .btn{
-    flex:1;
-    max-width: 150px;
-    
-    display: flex;           /* ← 必須 */
-    justify-content: center; /* 横中央 */
-    align-items: center;     /* 縦中央 */
-    text-align: center;
-} 
-
-/*さいごの段*/
- .submit-actions{
-    text-align: center;
-    margin-top: 24px;
-}
-
-/*投稿ボタン*/
-.submit-actions .btn-submit{
-    padding: 10px 48px;
-    background-color: #1e88fa;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/*投稿ボタン下のリンク*/
-.submit-actions .submit-links{
-    margin-top: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-}
-
- /*リンク*/
-.submit-actions .link-cancel,
-.submit-actions .link-draft{
-    background: none;
-    border: none;
-    padding: 0;
-    color: #1e88fa;
-    text-decoration: underline;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-/*product_detail.html用*/
-.product-page + h1 {
-    font-size: 18px;   
-    margin: 12px 0 16px;
-    line-height: 1.4;
-}
-
-.product-page{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
-
-
-/*カテゴリ別商品一覧*/
+/* =========================
+   Product (List/Detail)
+========================= */
 .product-grid{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/*横方向の制御*/
 .product-card{
     display: flex;
     align-items: center;
     gap: 16px;
-
-    border: 1px solid ;
-    padding: 10px;
+    border: 1px solid #000;
+    padding: 16px;
     border-radius: 10px;
 }
 
-/*縦方向の制御*/
-.product-info{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.product-image{
-    width: 160px;
-    height: 160px;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-}
-
-.product-detail-image{
-    width: 220px;
-    max-width: 100%;
-    display: block;
-    margin: 0 auto 16px;
-}
-
 .product-card a{
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.product-card  .product-image {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    flex-shrink: 0;
-    gap: 14px;
+.product-card .product-image{
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
+.product-info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 商品画像（一覧） */
+.product-image{
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 商品詳細の上部 */
 .product-summary{
-    display: flex;
-    align-items: flex-start;/*縦位置をそろえる*/
-    gap: 16px; /*画像と文字の間隔*/
-    margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
+/* 商品詳細画像（重複を統一） */
 .product-detail-image{
-    width: 120px;
-    height: auto;
-    object-fit: contain;
-    flex-shrink: 0;/*画像つぶれないように*/
+  width: 120px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 16px;
+  flex-shrink: 0;
 }
 
-/*右側の商品名・金額*/
 .product-meta{
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .product-title{
-    font-size: 22px;
-    line-height: 1.4;
-    margin: 0;/*左余白なし*/
+  font-size: 22px;
+  line-height: 1.4;
+  margin: 0;
 }
 
-.rank-num{
-    font-weight: bold;
+.rank-num{ font-weight: bold; }
+
+/* product_detail.html 用 */
+.product-page + h1{
+  font-size: 18px;
+  margin: 12px 0 16px;
+  line-height: 1.4;
 }
 
-/* モーダル全体（背景の暗幕） */
-.modal {
+.product-page{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   Modal
+========================= */
+.modal{
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5); /*  背景を暗く */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  padding: 16px;  /*画面端に引っ付くのを防ぐ*/
+  box-sizing: border-box;
 }
 
-/* 非表示用 */
-.modal.hidden {
-  display: none;
-}
+.modal.hidden{ display: none; }
 
-/* モーダル中身 */
-.modal-content {
-  background: #fff;    /*  白背景 */
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;    /*  画面内に収める */
-  overflow-y: auto;    /*  はみ出たらスクロール */
-  padding: 30px;
+.modal-content{
+  position: relative; 
+  background: #fff;
+  width: min(92vw, 420px); /*最大420px、スマホは92vw*/
+  max-height: 80vh;
+  overflow-y: auto;
   border-radius: 12px;
-  position: relative;
+  padding: 24px 20px;
+  box-sizing: border-box;  
 }
 
-.modal-content img {
+.modal-content img{
   width: 100%;
   max-width: 280px;
   height: auto;
@@ -828,81 +643,259 @@ body{
   margin: 0 auto 12px;
 }
 
-.mypage-review-image{
-    width: 100px;
-    height: 100px;
+.modal-close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  border-radius: 999px;
+}
+
+.modal-close:hover{
+  background: rgba(0,0,0,.06);
+}
+
+
+/* =========================
+   Admin
+========================= */
+.button-list.admin-top,
+.button-list.admin-middle{
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  justify-content: center;
+  list-style: none;
+  padding-left: 0;
+}
+
+.button-list.admin-top .btn,
+.button-list.admin-middle .btn{
+  flex: 1;
+  max-width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* 投稿系 */
+.submit-actions{
+  text-align: center;
+  margin-top: 24px;
+}
+
+.submit-actions .btn-submit{
+  padding: 10px 48px;
+  background-color: #1e88fa;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit-actions .submit-links{
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.submit-actions .link-cancel,
+.submit-actions .link-draft{
+  background: none;
+  border: none;
+  padding: 0;
+  color: #1e88fa;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Bootstrap btn-primary の見た目調整 */
+.btn-primary{
+  background-color: #1e88e5;
+  color: #fff;
+  border: none;
+}
+.btn-primary:hover{ background-color: #1565c0; }
+
+/* btn-secondary の見た目調整 */
+.btn-secondary{
+  background-color: #bbc3bc;
+  color: #000;
+}
+
+.btn-secondary:hover{
+  background-color: #9ea7a0;
+}
+
+
+
+/* =========================
+   Responsive
+========================= */
+
+/* スマホ向け（必要な分だけ上書き） */
+@media screen and (max-width: 600px){
+  body{
+    font-size: 14px;
+    padding: 10px;
+    padding-top: var(--header-h);
+    padding-bottom: calc(var(--footer-h) + var(--safe-bottom));
+  }
+
+  .page-title{
+    font-size: 20px;
+    margin: 20px 0 25px;
+  }
+
+  /* マイページのレビュー画像 */
+  .mypage-review-image{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .rating-stars{
+    color: #000;
+    font-size: 14px;
+  }
+
+  /* 下段：レビュー投稿は中央寄せ */
+  .button-list.bottom{
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  /* 追加UI */
+  .product-box{
+    display: flex;
+    gap: 20px;
+    border: 1px solid blue;
+    padding: 15px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+
+  .product-image img{
+    width: 220px;
+    height: auto;
     object-fit: cover;
     border-radius: 6px;
-}
+  }
 
-.favorite-btn {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-}
+  .product-info h2{ margin-top: 0; }
 
-.favorite-btn {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/*レビュー投稿する際の検索窓*/
-.review-search-form{
-    display: flex;
-    gap: 8px;
-}
-
-.review-search-form input[type="text"]{
-    width: 350px;
-    height: auto;
-    font-size: 15px;
-    padding: 0 12px;
-}
-
-
-.review-detail{
+  .rating-container{
     display: flex;
     align-items: flex-start;
-}
+    gap: 20px;
+  }
 
-.review-detail .favorite-area{
-    margin-left: auto;
+  .rating-label{
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  .rating-options{
     display: flex;
-    align-items: center;
-    gap: 4px;
-}
+    flex-direction: column;
+    gap: 6px;
+  }
 
-
-.review-card{
-    padding: 16px 0;
-    border-bottom: 1px dashed black; /*点線*/
-}
-
-.review-card:last-child{
-    border-bottom: none;
-}
-
-.rating{
+  .rating-item{
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 16px;
-}
-
-.rating-number{
-    font-size: 14px;
-    color: black;
-}
-
-.btn-primary {
-  background-color: #1e88e5;   /* 青 */
-  color: #fff;                /* 文字は白 */
-  border: none;               /* 黒縁を消す */
   }
 
-.btn-primary:hover {
-  background-color: #1565c0;  /* 少し濃い青 */
+  .rating-item-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px dashed #d74576;
+    padding: 12px;
+    width: 140px;
+    height: 140px;
+    justify-content: center;
+  }
+
+  .image-label{
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .review-sub-actions{
+    margin-top: 12px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  /* カテゴリ別商品一覧（スマホ向け高さ） */
+  .product-image{
+    height: 120px;
+  }
 }
+
+/* ちょい狭い画面（ボタン・下余白調整） */
+@media (max-width: 900px){
+  body{
+    padding-bottom: calc(var(--footer-h) + var(--safe-bottom));
+  }
+}
+
+/* PC向け */
+@media screen and (min-width: 1024px){
+  body{
+    font-size: 16px;
+    padding: 20px;
+    padding-top: var(--header-h);
+    padding-bottom: calc(100px + var(--safe-bottom));
+  }
+
+  /* 下段 */
+  .button-list.bottom{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .button-list.top{
+    justify-content: center;
+  }
+
+  .btn{
+    text-align: center;
+  }
+}
+
+
+/* フィールド上部に出るエラー */
+.errorlist {
+  list-style: none;
+  padding: 8px 12px;
+  margin: 6px 0 10px;
+  
+  background-color: #ffeaea;
+  border-left: 4px solid #d93025;
+  border-radius: 6px;
+
+  color: #d93025;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* liの余白を整える */
+.errorlist li {
+  margin: 0;
+}
+

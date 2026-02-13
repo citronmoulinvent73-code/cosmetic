@@ -6,17 +6,17 @@
 
 {% if products is not None %}
     {% if products %}
-        <ul>
+        <ul class="product-grid">
         {% for product in products %}
         
-            <div class="product-card">
+            <li class="product-card">
                 <a href="{% url 'form_app:review_create' product.id %}">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" class="product-image">
                     {% endif %}
                     {{ product.cosme_name }}
                 </a>
-            </div>
+            </li>
 
         {% endfor %}
         </ul>

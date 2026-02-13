@@ -94,6 +94,8 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'OPTIONS':{'max_similarity':0.5,},
+
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -140,6 +142,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/mypage/'
+LOGIN_REDIRECT_URL = 'form_app:my_page'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'form_app:login'
