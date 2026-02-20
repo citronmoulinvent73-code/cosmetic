@@ -5,7 +5,7 @@
         <div class="rank-num">{{ forloop.counter }}</div>
 
         {% if product.image %}
-            <img src="{{ product.image.url }}" class="product-image">
+            <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
         {% endif %}
 
         <h3>{{ product.cosme_name }}</h3>

@@ -3,16 +3,11 @@
 
 {% block content %}
 
-<h1>{{ user.username }}さんのレビュー一覧</h1>
+<h1 class="page-title">{{ user.username }}さんのレビュー一覧</h1>
 
 <div class="review-actions">
-    
     <a href ="{% url 'form_app:review_entry' %}" class=" btn btn-secondary">
         ✍レビュー投稿
-    </a>
-
-    <a href = "{% url 'form_app:review_draft_list' %}" class="btn btn-secondary">
-        📝一時保存したレビュー
     </a>
 </div>
 
@@ -30,11 +25,16 @@
             </div>
 
             <!--年代・肌質-->
-            <div class="reivew-body">
+            <div class="review-body">
                 <h2>{{forloop.counter}}.  {{ review.product.cosme_name }}</h2>
                 
                 <p class="review-date">
                     {{ review.posted_at|date:"Y/m/d" }}
+                </p>
+
+                <p class="review-meta">
+                    {{ review.user.name }}
+                    ({{ review.get_skin_type_display }}/{{ review.get_age_display }})
                 </p>
 
                 {% if review.rating %}
@@ -60,7 +60,7 @@
                     onsubmit="return confirm('このレビューを削除します？');"
                     >
                     {% csrf_token %}
-                    <button type="submit">削除</button>
+                    <button type="submit" class="btn btn-sm btn-secondary">削除</button>
                 </form>
             </div>
         </div>

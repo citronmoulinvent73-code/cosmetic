@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>登録情報の修正</h1>
+<h1 class="page-title">登録情報の修正</h1>
 
 <form method="post">
     {% csrf_token %}
-
-
-
 
     <div class="section">
         <p>ユーザー名：{{ user_form.username.value }}<br><small>※修正不可</small></p>
@@ -21,6 +18,12 @@
     </div>
 
     <button type="submit" class="btn btn-primary">保存</button>
+
+    <div class="form-actions vertical">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="{{ request.GET.next|default:'/' }}" class="link-cancel">キャンセル</a>
+    </div>
+    
 </form>
 
 {% endblock %}

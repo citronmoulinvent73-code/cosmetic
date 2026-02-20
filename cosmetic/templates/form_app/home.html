@@ -5,12 +5,14 @@
 
 {% block content %}
     <div class="home-container">
-
-        {% if user.is_authenticated %}
-            ようこそ、{{ user.username }}さん
-        {% else %}
-            ようこそ、ゲストさん
-        {% endif %}
+        
+        <p class="welcome-text">
+            {% if user.is_authenticated %}
+                ようこそ、{{ user.username }}さん
+            {% else %}
+                ようこそ、ゲストさん
+            {% endif %}
+        </p>
 
 <!--start 検索窓とか諸々追記-->
         <h1 class="section-title">コスメ検索</h1>
@@ -19,7 +21,6 @@
             <input type="text" name="q" class="form-input search-input" placeholder="コスメの名称を入力">
             <button type="submit" class="search-button">🔍</button>
         </form>
-
 
         <div class="category-container">
             <ul class="category-list">
@@ -41,7 +42,10 @@
             {% endif %}
         </div>
 
-        <h2 class="section-title">総合ランキング</h2>
+        <h2 class="section-title">人気ランキング　ＴＯＰ５</h2>
+        <p class="ranking-note">
+            ※レビュー件数が多い商品を優先して表示しています。
+        </p>
 
         <div id="home-ranking">
             {% include "form_app/_product_list.html" with products=ranking_products show_rank=True empty_message="ランキングはまだありません。" %}
@@ -56,13 +60,12 @@
                 <p id="modalPrice"></p>
 
                 <div id="modalStars" class="stars"></div>
-                <a id="modalDetailLink" class="stars_link">レビューを見る</a>
+                <a id="modalDetailLink" class="stars_link">詳細を見る</a>
 
             </div>
         </div>
-
-        <!--end 検索窓とか諸々追記-->
-        <div class="welcome-text"></div>   
+        
+        <a href="{% url 'form_app:ranking_all' %}" class="more-link">ランキングをもっと見る➡</a>
 
     </div>
 {% endblock content %}

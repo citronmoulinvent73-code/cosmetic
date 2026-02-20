@@ -5,18 +5,17 @@
 {% block content %}
 
 <div class="review-header">
-    <h1>レビュー投稿</h1>
+    <h1 class="page-title">レビュー投稿</h1>
 
     <a href = "{% url 'form_app:review_draft_list' %}" class="btn btn-secondary">
-        📝一時保存したレビュー
+        💾一時保存したレビュー
     </a>
 </div>
 
 <div class="product-box">
-    <div class="product-image">
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.cosme_name }}" style="width:150px;">
-        {% endif %}
+    <div class="product-thumb">
+        <!--<div class="product-image">-->
+        <img src="{{ product.image.url }}" class="product-thumb-img" alt="{{ product.cosme_name }}">
     </div>
 
     <div class="product-info">
@@ -30,53 +29,67 @@
     {% csrf_token %}
 
     <div class="rating-container">
-        <span class="rating-label">評価：</span>
-        
-        <!--エラーポップアップ-->
-        <script>
-            {% if form.rating.errors %}
-                alert("評価（★）を選択してください");
-            {% endif %}
-        </script>
+        <span class="rating-label">評価：</span>      
 
-        <!--ラジオボタン-->
-        <div class="rating-options">
+        <div class="rating-error">
+            {{ form.rating.errors }}
+        </div>
+
+        <!--☆ボタン-->
+        <div class="rating-stars" aria-label="評価">
             {% for value,label in form.rating.field.choices %}
                 {% if value != "" %}
-                    <label class="rating-item">
-                        <input type="radio" name="rating" value="{{ value }}">
-                        {{ label }}
-                    </label>
+                    <input 
+                    type="radio"
+                    id="star{{ value }}"
+                    name="rating"
+                    value="{{ value }}"
+                    {% if selected|stringformat:"s" == value|stringformat:"s" %}checked{% endif %}
+                    >
+                    <label for="star{{ value }}">★</label>
                 {% endif %}
             {% endfor %}
         </div>
+    </div>
 
-          <!--レビューの画像選択-->
-        <div>
-            {{ form.image }}
-        </div>
+    <!--レビューの画像選択-->
+    <div class="image-upload">
+        {{ form.image.errors }}
+        {{ form.image }}
+        <img id="preview" class="preview hidden" alt="プレビュー">
     </div>
 
   
     <p>
         <label>良い点：</label><br>
+        {{ form.goodpoint_comment.errors }}
         {{ form.goodpoint_comment }}
     </p>
 
     <p>
         <label>悪い点：</label><br>
+        {{ form.badpoint_comment.errors }}
         {{ form.badpoint_comment }}
     </p>
+
 
     <div class="submit-actions">
         <button type="submit" name="action" value="submit" class="btn-submit">
             投稿
         </button>
-        
+    
         <div class="submit-links">
-            <a href="{% url 'form_app:my_page' %}" class="link-cancel">
-                キャンセル
-            </a>
+            {% if request.user.is_staff %}
+                <a href="{% url 'form_app:admin_my_page' %}" class="link-cancel">
+                    キャンセル
+                </a>
+            {% else %}
+                <a href="{% url 'form_app:my_page' %}" class="link-cancel">
+                    キャンセル
+                </a>
+            {% endif %}
+
+            <!--a href="{% url 'form_app:my_page' %}" class="link-cancel">キャンセル</a-->
 
             <button type="submit" name="action" value="draft" class="link-draft">
                 一時保存
@@ -86,22 +99,27 @@
 </form>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
     const input = document.querySelector('input[type="file"]');
     const preview = document.getElementById('preview');
 
-    if(input){
-        input.addEventListener('change', function(){
-            const file = this.files[0];
-            if(file){
-                const render = new FileReader();
-                render.onload = function(e){
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                render.readAsDataURL(file);
-            }
-        });
-    }
+    if(!input || !preview) return;
+
+    
+    input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+
+        if(!file){
+            preview.src = "";
+            preview.classList.add("hidden");
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove("hidden");
+    });
+});
+
 </script>
 
 {% endblock %}

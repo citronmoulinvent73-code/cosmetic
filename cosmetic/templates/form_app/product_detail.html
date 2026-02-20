@@ -5,10 +5,10 @@
 {% block content %}
 
     <div class="product-page">
-        <h1>レビュー一覧</h1>
+        <h1 class="page-title">レビュー一覧</h1>
 
         {% if user.is_authenticated %}
-            <a href ="{% url 'form_app:review_entry' %}" class="btn btn-secondary">
+            <a href ="{% url 'form_app:review_create' product.id %}" class="btn btn-secondary">
                 ✍レビュー投稿
             </a>
         {% endif %}
@@ -31,8 +31,8 @@
     {% for review in reviews %}
         <div class="review-card review-detail">
             <div class="review-main">
-                <strong>{{ review.user.username }}</strong><br>
-            
+                <strong>{{ review.user.username }}</strong>   （{{ review.get_skin_type_display }}／{{ review.get_age_display }}）<br>
+                
                 {% with review.rating as rate %}
                     <div class="stars">
                         {% for i in "12345" %}
@@ -45,6 +45,13 @@
                         <span class="rate">{{ rate }}</span>
                     </div>
                 {% endwith %}
+
+                {% if review.image %}
+                    <div class="review-image">
+                        <img src="{{ review.image.url }}" class="review-upload-image" alt="レビュー画像">
+                    </div>
+                {% endif %}
+
                 良い点：{{ review.goodpoint_comment }}<br>
                 悪い点：{{ review.badpoint_comment }}<br>
             </div>
@@ -68,7 +75,6 @@
                 {% endif %}
             </div>
         </div>
-        <hr>
     {% endfor %}
 
 {% else %}

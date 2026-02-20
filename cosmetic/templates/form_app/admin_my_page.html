@@ -2,6 +2,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block body_class %}admin-page{% endblock %}
+
 {% block title %}マイページ（運営ページ）{% endblock title %}
 
 {% block content %}
@@ -14,26 +16,25 @@
          
     <!--上段-->
         <div class="button-list admin-top">
-            <a href="{% url 'form_app:edit_profile' %}" class="btn btn-secondary">👤登録情報の修正</a>
-            <a href="{% url 'form_app:password_change' %}" class="btn btn-secondary">🔒パスワード変更</a>
+            <a href="{% url 'form_app:edit_profile' %}?next={% url 'form_app:admin_my_page' %}" class="btn btn-secondary">👤登録情報の修正</a>
+            <a href="{% url 'form_app:password_change' %}?next={% url 'form_app:admin_my_page' %}" class="btn btn-secondary">🔒パスワード変更</a>
         </div>
 
     <!--中段-->
         <div class="button-list admin-middle">
-            <a href="{% url 'form_app:product_create' %}" class="btn btn-secondary">💄コスメ登録</a>
+            <a href="{% url 'form_app:product_create' %}" class="btn btn-secondary">💄コスメ登録（運営）</a>
             <a href="{% url 'form_app:product_list' %}" class="btn btn-secondary">商品一覧（運営）</a>
         </div>
 
     <!--下段-->
-        <div class="review-header">
-            <a href="{% url 'form_app:review_list' %}" class="review-list-link">レビュー一覧</a>
-            <a href="{% url 'form_app:review_entry' %}" class="btn btn-secondary">✍レビュー投稿</a>
+        <div class="button-list admin-bottom">
+            <a href="{% url 'form_app:review_list' %}" class="btn btn-secondary">📖レビュー一覧</a>
+            <a href="{% url 'form_app:review_entry' %}?next={% url 'form_app:admin_my_page' %}" class="btn btn-secondary">✍レビュー投稿</a>
         </div>
 
     <!--最新レビュー表示スペース-->
         <div class="latest-review-area">
         </div>
- 
 
         {% else %}
             <p>ログインしてください</p>

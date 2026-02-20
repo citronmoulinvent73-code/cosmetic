@@ -18,11 +18,14 @@
                 <a href="{% url 'form_app:home' %}">Cosme Vrai</a>
             </h1>
 
-            {% if user.is_authenticated %}
-                <a href="{% url 'form_app:logout' %}"class="btn btn-secondary btn-sm" onclick="return confirm('ログアウトしますか？')">ログアウト</a>
-            {% else %}
-                <a href="{% url 'form_app:login' %}"class="btn btn-primary btn-sm">ログイン</a>            
-            {% endif %}
+            {% block header_auth %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'form_app:logout' %}" class="btn btn-secondary btn-sm" onclick="return confirm('ログアウトしますか？')">ログアウト</a>
+                {% else %}
+                    <a href="{% url 'form_app:login' %}" class="btn btn-primary btn-sm">ログイン</a>            
+                {% endif %}
+            {% endblock %}
+
         </header>
     
         <!--子テンプレ内容を定義-->

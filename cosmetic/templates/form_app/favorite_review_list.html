@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block body_class %}favorite-page{% endblock %}
+
 {% block content %}
 
-<h1>お気に入りレビュー一覧</h1>
+<h1 class="page-title">お気に入りレビュー一覧</h1>
 
 {% for fav in favorites %}
     <div class="review-card">
@@ -12,11 +14,15 @@
         </h3>
 
         {% if fav.review.product.image %}
-            <img src="{{ fav.review.product.image.url }}" class="product-image">
+            <img src="{{ fav.review.product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
         {% endif %}
 
         <p class="review-user">
-            {{ fav.review.user.username }}さんのレビュー
+            {{ fav.review.user.username }}さん
+            {% if fav.review.skin_type and fav.review.age %}
+                （{{ fav.review.get_skin_type_display }}／{{ fav.review.get_age_display }}）
+            {% endif %}
+            のレビュー
         </p>
 
         <p class="rating">
@@ -34,6 +40,11 @@
         
         <p>良い点：{{ fav.review.goodpoint_comment|truncatechars:50 }}</p>
         <p>悪い点：{{ fav.review.badpoint_comment|truncatechars:50 }}</p>
+
+        <form method="post" action="{% url 'form_app:review_favorite' fav.review.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-secondary ">削除</button>
+        </form>
 
     </div>
 {% empty %}

@@ -1,27 +1,68 @@
-
 <!--category_product_list.htmlの転用-->
 
 {% extends "base.html" %}
 {% load static %}
 
+{% block body_class %}ranking-page{% endblock %}
+
 {% block content %}
 
-<h1>{{ category_label }}  ランキング</h1>
+<div class="ranking-page">
 
+    <h1 class="page-title">{{ category_label }} ランキング</h1>
 
-<!--ランキング用カテゴリタブ-->
-<div class="category-container">
-    <ul class="category-list">
-        <li><a href="{% url 'form_app:ranking_by_category' 'skincare' %}">スキンケア</a></li>
-        <li><a href="{% url 'form_app:ranking_by_category' 'uvcare' %}">UVケア</a></li>
-        <li><a href="{% url 'form_app:ranking_by_category' 'basemake' %}">ベースメイク</a></li>
-        <li><a href="{% url 'form_app:ranking_by_category' 'pointmake' %}">ポイントメイク</a></li>
-        <li><a href="{% url 'form_app:ranking_by_category' 'bodycare' %}">ボディケア</a></li>
-        <li><a href="{% url 'form_app:ranking_by_category' 'haircare' %}">ヘアケア</a></li>
-        <li><a href="{% url 'form_app:ranking_by_category' 'other' %}">その他</a></li>
-    </ul>
-</div>
+    <!--ランキング用カテゴリタブ-->
+    <div class="category-container">
+        <ul class="category-list">
+            <li><a href="{% url 'form_app:ranking_all' %}">総合人気</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'skincare' %}">スキンケア</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'uvcare' %}">UVケア</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'basemake' %}">ベースメイク</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'pointmake' %}">ポイントメイク</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'bodycare' %}">ボディケア</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'haircare' %}">ヘアケア</a></li>
+            <li><a href="{% url 'form_app:ranking_by_category' 'other' %}">その他</a></li>
+        </ul>
+    </div>
 
-{% include "form_app/ranking_product_list_content.html" %}
+    <form method="get"
+        class="rank-filter-form"
+        {% if category %}
+        action="{% url 'form_app:ranking_by_category' category %}"
+        {% else %}
+        action="{% url 'form_app:ranking_all' %}"    
+        {% endif %}
+        onchange="this.submit()">
+    
+    <select name="skin_type" class="form-input">
+        <option value="">肌質：指定なし</option>
+        {% for v, label in SKIN_CHOICES %}
+        <option value="{{ v }}" {% if skin_type == v %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
 
+    <select name="age" class="form-input">
+        <option value="">年代：指定なし</option>
+        {% for v, label in AGE_CHOICES %}
+        <option value="{{ v }}" {% if age == v %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    </form>
+
+    {% if products_count == 0 %}
+        <div class="empty-state">
+            <p class="empty-title">この条件に合うレビューがありません。</p>
+        
+            {% if category %}
+            <a href="{% url 'form_app:ranking_by_category' category %}">絞り込みを解除</a>
+            {% else %}
+            <a href="{% url 'form_app:ranking_all' %}">絞り込みを解除</a>
+            {% endif %}
+ 
+        </div>
+    {% else%}
+        {% include 'form_app/ranking_product_list_content.html' %}
+    {% endif %}
+
+    </div>
 {% endblock %}

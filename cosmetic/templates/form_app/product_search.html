@@ -1,8 +1,11 @@
 <!--base.htmlを継承-->
 {% extends 'base.html' %}
+
+{% block body_class %}product-search-page{% endblock %}
+
 {% block content %}
 
-<h1>コスメ選択</h1>
+<h1 class="page-title">コスメ選択</h1>
 
 {% if products is not None %}
     {% if products %}
@@ -12,7 +15,7 @@
             <li class="product-card">
                 <a href="{% url 'form_app:review_create' product.id %}">
                     {% if product.image %}
-                        <img src="{{ product.image.url }}" class="product-image">
+                        <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
                     {% endif %}
                     {{ product.cosme_name }}
                 </a>

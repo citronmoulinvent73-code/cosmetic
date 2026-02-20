@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings
 
 AGE_CHOICES = (
@@ -27,24 +26,27 @@ SKIN_CHOICES = (
 )
 
 
-class Category(models.Model):
-    cosme_name = models.CharField(max_length=100)
 
 class Product(models.Model):
     image = models.ImageField(upload_to='product_images/', blank=True, null=True) #商品画像
     cosme_name = models.CharField("商品名",max_length=200)  #商品名
     category = models.CharField("カテゴリー",max_length=50)  #カテゴリー    
-    price = models.IntegerField("値段(円)", blank=True, null=True) #値段
+    price = models.IntegerField("価格(円)", blank=True, null=True) #値段
 
     def __str__(self):
         return self.cosme_name
     
 class Review(models.Model):
     #商品を紐づく（外部キー）
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
     product = models.ForeignKey(Product,
                                 related_name='reviews',
                                 on_delete=models.CASCADE)
+    age = models.CharField(max_length=10, choices=AGE_CHOICES, blank=True)
+    skin_type = models.CharField(max_length=50, choices=SKIN_CHOICES, blank=True)
+    
     rating = models.IntegerField(
         choices=[
             (1,'☆☆☆☆★'),
@@ -56,19 +58,19 @@ class Review(models.Model):
     
     goodpoint_comment = models.TextField(blank=True)
     badpoint_comment = models.TextField(blank=True)
-    
     image = models.ImageField(upload_to='product_images/',blank=True,null=True)
 
     is_draft= models.BooleanField(default=False)
-    
-    created_at = models.DateTimeField(auto_now_add = True) #下書き作成日時
+    created_at = models.DateTimeField(auto_now_add=True) #下書き作成日時
     posted_at = models.DateTimeField(null=True, blank=True) #投稿日時
   
     def __str__(self):
         return f"{self.product.cosme_name}のレビュー"
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
 
     age = models.CharField(
         max_length=10,
@@ -88,12 +90,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-
-
-class Cosmetic(models.Model):
-    name = models.CharField(max_length=100)
-    brand = models.CharField(max_length=100)
-    
     
 #レビューお気に入り
 class ReviewFavorite(models.Model):
@@ -105,10 +101,10 @@ class ReviewFavorite(models.Model):
         Review,on_delete=models.CASCADE,
         related_name="favorites"
     )
-    created_at=models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        unique_together=("user","review")
+        unique_together = ("user","review")
         
     def __str__(self):
         return f'{self.user}♡{self.review}'

@@ -24,7 +24,11 @@ SECRET_KEY = 'django-insecure-t)=*ajrubq(6g#_itcdz90nyk!+%4z)549)$a7)sqaio_!p*&x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True #本番環境ではFalseに修正
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'miharu.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -52,9 +56,8 @@ MIDDLEWARE = [
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
     
-SESSION_COOKIE_SAMSITE = 'False'
-CSRF_COOKIE_SAMSITE = "False"
-
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 
 ROOT_URLCONF = 'cosmetic.urls'
@@ -62,7 +65,7 @@ ROOT_URLCONF = 'cosmetic.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'cosmetic' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -95,7 +98,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
         'OPTIONS':{'max_similarity':0.5,},
-
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -127,7 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "cosmetic" / "static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 

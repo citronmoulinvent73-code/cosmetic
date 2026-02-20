@@ -3,7 +3,19 @@
 
 {% block content %}
 
-<h1>投稿しました</h1>
-<a href="{% url 'form_app:my_page' %}">マイページへ戻る</a>
+<div class="success-page">
+    <h1>投稿しました</h1>
+
+    {% if request.user.is_staff %}
+        <a href="{% url 'form_app:admin_my_page' %}" class="link-cancel">
+            運営ページへ戻る
+        </a>
+    {% else %}
+        <a href="{% url 'form_app:my_page' %}" class="link-cancel">
+            マイページへ戻る
+        </a>
+    {% endif %}
+
+</div>
 
 {% endblock %}

@@ -15,43 +15,41 @@
 
             <!--商品画像（左寄せ）-->
             {% if product.image %}
-                <img src="{{ product.image.url }}" class="product-image">
+                <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
             {% endif %}
 
             <!--テキストまとめ（右寄せ）-->
             <div class="product-info">
 
-            <!--商品名-->
-            <h3>{{ product.cosme_name }}</h3>
+                <!--商品名-->
+                <h3>{{ product.cosme_name }}</h3>
 
-            <!--平均評価-->
-            {% with product.avg_rating|default:0 as avg %}
-                <div class="stars">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= avg %}
-                            ★
-                        {% else %}
-                            ☆
-                    {% endif %}
-                    {% endfor %}
-                    <span class="avg">
-                        {{ avg|floatformat:1 }}
-                    </span>
-                </div>
-            {% endwith %}
+                <!--平均評価-->
+                {% with product.avg_rating|default:0 as avg %}
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= avg %}
+                                ★
+                            {% else %}
+                                ☆
+                        {% endif %}
+                        {% endfor %}
+                        <span class="avg">
+                            {{ avg|floatformat:1 }}
+                        </span>
+                    </div>
+                {% endwith %}
 
-            <!--レビュー数-->
-            <p class="reivew-count">
-                {{ product.review_count }}件のレビュー
-            </p>
+                <!--レビュー数-->
+                <p class="review-count">
+                    {{ product.review_count }}件のレビュー
+                </p>
 
-            <!--詳細-->
-            <a href="{% url 'form_app:product_detail' product.id %}">
-                詳細をみる
-            </a>
+                <!--詳細-->
+                <a href="{% url 'form_app:product_detail' product.id %}">
+                    詳細をみる
+                </a>
             </div>
-
-           
         </div>
     {% empty %}
         <p>レビューはありません</p>

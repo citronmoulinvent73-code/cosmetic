@@ -9,7 +9,8 @@
 
         {% if product.image %}
             <a href="{% url 'form_app:product_detail' product.id %}">
-                <img src="{{ product.image.url }}" class="product-image">
+                <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像"
+>
             </a>
         {% endif %}
 

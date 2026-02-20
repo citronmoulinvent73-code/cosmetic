@@ -2,12 +2,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>コスメ登録</h1>
+<h1 class="page-title">コスメ登録（運営用）</h1>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">登録</button>
+    <div class="form-row">
+        <label>画像</label>
+
+        <!--レビューの画像選択-->
+        <div class="image-upload">
+            {{ form.image.errors }}
+            {{ form.image }}
+            <img id="preview" class="preview hidden" alt="プレビュー">
+        </div>
+    </div>
+
+    {{ form.cosme_name.as_field_group }}
+    {{ form.category.as_field_group }}
+    {{ form.price.as_field_group }}
+
+    <div class="form-actions vertical">
+        <button type="submit" class="btn btn-primary">登録</button>
+        <a href="{% url 'form_app:admin_my_page' %}" class="link-cancel">キャンセル</a>
+    </div>
 </form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById('id_image');
+    const preview = document.getElementById('preview');
+
+    if(!input || !preview) return;
+
+    
+    input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+
+        if(!file){
+            preview.src = "";
+            preview.classList.add("hidden");
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove("hidden");
+    });
+});
+
+</script>
+
 
 {% endblock %}

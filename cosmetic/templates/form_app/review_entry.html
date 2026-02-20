@@ -2,7 +2,7 @@
 {% block title %}レビュー投稿{% endblock %}
 
 {% block content %}
-<h1>レビュー投稿</h1>
+<h1 class="page-title">レビュー投稿</h1>
 
 <!-- 新規レビュー＋検索フォーム -->
 <h2>✍ 新しくレビューを書く</h2>
@@ -24,7 +24,7 @@
 
 {% if drafts %}
     <a href = "{% url 'form_app:review_draft_list' %}" class="btn btn-secondary">
-        📝一時保存したレビュー
+        💾一時保存したレビュー
     </a>
 {% else %}
     <p>一時保存したレビューはありません。</p>

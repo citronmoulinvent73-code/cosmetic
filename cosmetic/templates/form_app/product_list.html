@@ -1,37 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>商品一覧（運営用）</h1>
+<h1 class="page-title">商品一覧（運営用）</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>商品画像</th>
-      <th>商品名</th>
-      <th>カテゴリー</th>
-      <th>価格</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for product in products %}
-    <tr>
-      <td><img src="{{ product.image.url }}" class="product-image"></td>
-      <td>{{ product.cosme_name }}</td>
-      <td>{{ product.category }}</td>
-      <td>￥{{ product.price }}</td>
-      <td>
-        <form method="post" action="{% url 'form_app:product_delete' product.id %}">
+<div class="admin-product-grid">
+  {% for product in products %}
+    <div class="admin-product-card">
+      <div class="admin-product-thumb">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
+        {% endif %}
+      </div>
+
+      <div class="admin-product-info">
+        <div class="admin-product-name">商品名：{{ product.cosme_name }}</div>
+        <div class="admin-product-meta">
+          <span class="admin-product-category">カテゴリー：{{ product.category }}</span>
+          <span class="admin-product-price">価格（円）：￥{{ product.price }}</span>
+        </div>
+      </div>
+
+      <div class="admin-product-buttons">
+        <a href="{% url 'form_app:product_edit' product.id %}" class="btn btn-sm btn-secondary">編集</a>
+
+        <form method="post" action="{% url 'form_app:product_delete' product.id %}"
+        onsubmit="return confirm('このレビューを削除します？');">
           {% csrf_token %}
-          <button type="submit">削除</button>
+          <button type="submit" class="btn btn-sm btn-secondary">削除</button>
         </form>
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="4">商品がありません</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      </div>
+      
+    </div>
+  {% empty %}
+    <p>商品がありません</p>
+  {% endfor %}
+</div>
+
+<div class="admin-back">
+  <a href="{% url 'form_app:admin_my_page' %}" class="more-link">➡運営ページに戻る</a>
+</div>
+
 {% endblock %}

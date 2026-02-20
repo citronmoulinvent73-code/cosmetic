@@ -3,10 +3,10 @@
 
 {% block content %}
 
-    <h1>一時保存したレビュー</h1>
+    <h1 class="page-title">一時保存したレビュー</h1>
 
     {% if drafts %}
-        <ul>
+        <ul class="draft-list">
             {% for draft in drafts %}
                 <li style="margin-bottom:16px;">
                     <strong>{{ draft.product.cosme_name }}</strong><br>
@@ -17,6 +17,7 @@
                         <img src="{{ draft.product.image.url }}" class="draft-review-image">
                     {% endif %}
 
+                   
                     {% if draft.rating %}
                         <p>評価：{{ draft.get_rating_display }}</p>
                     {% endif %}
@@ -24,32 +25,36 @@
                     {% if draft.goodpoint_comment %}
                         <p>
                             <strong>良い点</strong><br>
-                            {{ draft.goodpoint_comment|truncatechars:50 }}
+                            {{ draft.goodpoint_comment|linebreaksbr }}
                         </p>
                     {% endif %}
 
                     {% if draft.badpoint_comment %}
                         <p>
                             <strong>悪い点</strong><br>
-                            {{ draft.badpoint_comment|truncatechars:50 }}
+                            {{ draft.badpoint_comment|linebreaksbr }}
                         </p>
                     {% endif %}
 
                     保存日：{{ draft.created_at|date:"Y/m/d H:i" }}<br>
-
-                    <a href="{% url 'form_app:review_draft_edit' draft.id %}">
-                        編集
-                    </a>
                     
-                    <form 
-                        action ="{% url 'form_app:review_draft_delete' draft.id %}"
-                        method="post"
-                        onsubmit="return confirm('この下書きを削除しますか？');"
-                        style="display:inline;"
-                    >
-                        {% csrf_token %}
-                        <button type="submit">削除</button>
-                    </form>
+
+                    <div class="draft-actions">
+                        <a href="{% url 'form_app:review_draft_edit' draft.id %}" class="btn btn-sm btn-secondary">
+                            編集
+                        </a>
+                    
+                        <form 
+                            action ="{% url 'form_app:review_draft_delete' draft.id %}"
+                            method="post"
+                            onsubmit="return confirm('この下書きを削除しますか？');"
+                            style="display:inline;"
+                            >
+                        
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+                        </form>
+                    </div>
                 </li>
             {% endfor %}
         </ul>

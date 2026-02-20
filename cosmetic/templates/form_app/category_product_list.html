@@ -3,63 +3,64 @@
 
 {% block content %}
 
-<h1>{{ category_label }}の商品一覧</h1>
+<div class="category-page">
+    <h1 class="page-title">{{ category_label }}の商品一覧</h1>
 
 
-{% if products %}
-<div class="product-grid">
-    {% for product in products %}
+    {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
 
-    <div class="product-card">
+                <div class="product-card">
 
-        <!--順位-->
-        <div class="rank-num">
-            {{ forloop.counter }}
-        </div>
+                    <!--順位-->
+                    <div class="rank-num">
+                        {{ forloop.counter }}
+                    </div>
 
-        <!--商品画像（左寄せ）-->
-        {% if product.image %}
-            <img src="{{ product.image.url }}" class="product-image">
-        {% endif %}
+                    <!--商品画像（左寄せ）-->
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
+                    {% endif %}
 
-        <!--テキストまとめ（右寄せ）-->
-        <div class="product-info">
+                    <!--テキストまとめ（右寄せ）-->
+                    <div class="product-info">
 
-            <!--商品名-->
-            <h3>{{ product.cosme_name }}</h3>
+                        <!--商品名-->
+                        <h3>{{ product.cosme_name }}</h3>
 
-            <!--平均評価-->
-            {% with product.avg_rating|default:0 as avg %}
-                <div class="stars">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= avg %}
-                            ★
-                        {% else %}
-                            ☆
-                        {% endif %}
-                    {% endfor %}
-                    <span class="avg">
-                        {{ avg|floatformat:1 }}
-                    </span>
+                        <!--平均評価-->
+                        {% with product.avg_rating|default:0 as avg %}
+                            <div class="stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= avg %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="avg">
+                                    {{ avg|floatformat:1 }}
+                                </span>
+                            </div>
+                        {% endwith %}
+
+                        <!--レビュー数-->
+                        <p class="review-count">
+                            {{ product.review_count }}件のレビュー
+                        </p>
+
+                        <!--詳細-->
+                        <a href="{% url 'form_app:product_detail' product.id %}">
+                            詳細をみる
+                        </a>
+                    </div>
                 </div>
-            {% endwith %}
-
-            <!--レビュー数-->
-            <p class="reivew-count">
-                {{ product.review_count }}件のレビュー
-            </p>
-
-            <!--詳細-->
-            <a href="{% url 'form_app:product_detail' product.id %}">
-                詳細をみる
-            </a>
+            {% endfor %}    
         </div>
-    </div>
-    {% empty %}
+    {% else %}
         <p>商品がありません。</p>
-    {% endfor %}    
+    {% endif %}
 
 </div>
-{% endif %}
-
 {% endblock %}
