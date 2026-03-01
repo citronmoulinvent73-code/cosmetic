@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="success-page">
-    <h1>投稿しました</h1>
+    <h1 class="success-message">投稿しました</h1>
 
     {% if request.user.is_staff %}
         <a href="{% url 'form_app:admin_my_page' %}" class="link-cancel">
@@ -15,7 +15,6 @@
             マイページへ戻る
         </a>
     {% endif %}
-
 </div>
 
 {% endblock %}

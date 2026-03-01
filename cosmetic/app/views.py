@@ -140,12 +140,23 @@ def home(request):
         {'ranking_products':ranking_products,
          'reviews':reviews})
     
-    
+
+#新規アカウント登録
 def register(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            
+            Profile.objects.update_or_create(
+                user=user,
+                defaults={
+                    "age": form.cleaned_data.get("age_group", ""),
+                    "gender": form.cleaned_data.get("gender", ""),
+                    "skin_type": form.cleaned_data.get("skin_type", ""),
+                }
+            )
+            
             return redirect(reverse('form_app:login'))
     else:
         form =UserForm()
@@ -223,8 +234,29 @@ def search_result_view(request):
         })
     
 @staff_required
-def admin_my_page(request):   
-    return render(request, "form_app/admin_my_page.html")
+def admin_my_page(request):
+    reviews = (
+        Review.objects
+        .filter(user=request.user, is_draft=False)
+        .select_related("product")
+        .order_by("-posted_at", "-id")[:1]
+    )
+    latest_review = (
+        Review.objects
+        .filter(user=request.user, is_draft=False)
+        .select_related("product")
+        .order_by("-posted_at", "-id")
+        .first()
+    )
+
+    return render(request, "form_app/admin_my_page.html", {
+        "reviews": reviews,
+        "review": latest_review,
+    })
+
+
+
+
 
 #商品登録
 @staff_required
@@ -325,7 +357,6 @@ def review_create(request, product_id):
             else:
                 return redirect("form_app:my_page")
             
-            
         
         #投稿(必ずバリデーション)
         form = ReviewForm(request.POST, request.FILES, instance=draft, request=request)
@@ -390,6 +421,12 @@ def review_draft_edit(request, pk):
         
         action = request.POST.get("action")
         
+        # ★ まずクリア処理（returnより前）
+        if request.POST.get("image-clear") == "on":
+            if review.image:
+                review.image.delete(save=False)  # ファイル削除
+            review.image = None                  # DB参照を空に
+        
         #下書き保存はバリエーション通さず
         if action =="draft":
             review.goodpoint_comment = request.POST.get("goodpoint_comment","")
@@ -404,13 +441,14 @@ def review_draft_edit(request, pk):
             return redirect("form_app:review_draft_list")
         
         #投稿
+        form = ReviewForm(request.POST, request.FILES, instance=review, request=request)
         if form.is_valid():
             review = form.save(commit=False)            
             review.is_draft = False
             review.posted_at = timezone.now()
             review.save()
             return redirect("form_app:review_success")
-                          
+                        
     else:
         form = ReviewForm(instance=review, request=request)
         
@@ -473,20 +511,19 @@ def edit_profile(request): #プロフィール修正
     
     if request.method == "POST":
         profile_form = ProfileForm(request.POST, instance=profile)
+        
         if profile_form.is_valid():
-            profile_form.save()
+            profile_form.save()    
             return redirect("form_app:my_page")
-    
+        
     else:
         profile_form = ProfileForm(instance=profile)
     
     user_form = UserReadOnlyForm(instance=request.user)
     
-    return render(request, "form_app/edit_profile.html",
-                  {
-                      "user_form":user_form,
-                      "profile_form":profile_form,
-        })
+    return render(request, "form_app/edit_profile.html",{
+        "user_form":user_form,
+        "profile_form":profile_form,})
  
     
 #レビュー投稿    
@@ -569,8 +606,9 @@ def product_edit(request, pk):
         form = CosmeForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return render(request, "form_app/product_create_success.html", {
+            return render(request, "form_app/product_edit_success.html", {
                 "message": "商品を更新しました",
+                "product":product,
             })    
     else:
         form = CosmeForm(instance=product)

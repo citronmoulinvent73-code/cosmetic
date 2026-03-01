@@ -26,59 +26,60 @@
         </div>
     </div>
 
-   
-{% if reviews %}
-    {% for review in reviews %}
-        <div class="review-card review-detail">
-            <div class="review-main">
-                <strong>{{ review.user.username }}</strong>   （{{ review.get_skin_type_display }}／{{ review.get_age_display }}）<br>
-                
-                {% with review.rating as rate %}
-                    <div class="stars">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= rate %}
-                                ★
-                            {% else %}
-                                ☆
-                            {% endif %}
-                        {% endfor %}
-                        <span class="rate">{{ rate }}</span>
-                    </div>
-                {% endwith %}
+    <div class="latest-review-area">   
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="review-card">
 
-                {% if review.image %}
                     <div class="review-image">
-                        <img src="{{ review.image.url }}" class="review-upload-image" alt="レビュー画像">
+                        {% if review.image %}
+                            <img src="{{ review.image.url }}" class="mypage-review-image" alt="レビュー画像">
+                        {% elif product.image %}
+                            <img src="{{ product.image.url }}" class="mypage-review-image" alt="商品画像">
+                        {% endif %}
                     </div>
-                {% endif %}
+        
+                    <div class="review-body">
+                        <div class="review-header">
+                            <h3 class="review-title">
+                                {{ review.user.username }}さん（{{ review.get_skin_type_display }}／{{ review.get_age_display }}）
+                            </h3>
 
-                良い点：{{ review.goodpoint_comment }}<br>
-                悪い点：{{ review.badpoint_comment }}<br>
-            </div>
-            
-            <!--♡-->
-            <div class="favorite-area">
-                {% if user.is_authenticated %}
-                    <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
-                        {% csrf_token %}
-                        <button class="favorite-btn">
-                            {% if review.is_favorited %}
-                                ♥
-                            {% else %}
-                                ♡
-                            {% endif %}
-                        </button>
-                    </form>
-                    <span>{{ review.favorites.count }}</span>
-                {% else %}
-                    <span>♥{{ review.favorites.count }}</span>
-                {% endif %}
-            </div>
-        </div>
-    {% endfor %}
+                            <div class="favorite-area">
+                                <!-- ♡ -->
+                                {% if user.is_authenticated %}
+                                    <form action="{% url 'form_app:review_favorite' review.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button class="favorite-btn" type="submit">
+                                            {% if review.is_favorited %}♥{% else %}♡{% endif %}
+                                        </button>
+                                    </form>
+                                    <span class="favorite-count">{{ review.favorites.count }}</span>
+                                {% else %}
+                                    <span>♥{{ review.favorites.count }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
 
-{% else %}
-    <p>まだレビューはありません</p>
-{% endif %}
+                        {% with review.rating as rate %}
+                            <p class="rating-display">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= rate %}★{% else %}☆{% endif %}
+                                {% endfor %}
+                                <span class="rating-number">{{ rate }}</span>
+                            </p>
+                        {% endwith %}
+
+                        <p><strong>良い点</strong><br>{{ review.goodpoint_comment|linebreaksbr }}</p>
+                        <p><strong>悪い点</strong><br>{{ review.badpoint_comment|linebreaksbr }}</p>
+
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <p>まだレビューはありません</p>
+        {% endif %}
+</div>
 
 {% endblock content %}    

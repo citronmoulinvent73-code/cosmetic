@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm
 from django.contrib.auth import authenticate, get_user_model
+from django.core.exceptions import ValidationError
 from .models import AGE_CHOICES, GENDER_CHOICES, SKIN_CHOICES,Product,Review,Profile
 
 User = get_user_model()
@@ -173,49 +174,56 @@ class CosmeForm(AddFormInputClassMixin,CosmeCreateForm):
 
 
 class ReviewForm(forms.ModelForm):
-    RATTING_CHOICES = [
-        (1,'☆☆☆☆★'),
-        (2,'☆☆☆★★'),
-        (3,'☆☆★★★'),
-        (4,'☆★★★★'),
-        (5,'★★★★★'),
-    ]
-
-    rating = forms.ChoiceField(
-        choices=RATTING_CHOICES,
-        required=True,
-        widget=forms.RadioSelect,
-        label="評価"
-        )
+    #RATTING_CHOICES = [(1,'★☆☆☆☆'),(2,'★★☆☆☆'),(3,'★★★☆☆'),(4,'★★★★☆'),(5,'★★★★★'),]
+    #rating = forms.TypedChoiceField(choices=RATTING_CHOICES,coerce=int,required=False)
 
     goodpoint_comment = forms.CharField(
-        min_length=20,
-        widget=forms.Textarea,
-        label="コメント（20文字以上）"
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
+        label="良い点（20文字以上）"
     )
 
     badpoint_comment = forms.CharField(
-        min_length=20,
-        widget=forms.Textarea,
-        label="コメント（20文字以上）"
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
+        label="悪い点（20文字以上）"
     )
-
        
     class Meta:
         model = Review
         fields =["rating","goodpoint_comment","badpoint_comment","image"]
-        exclude = ("product","user","is_draft")
-
-        widgets={
-            'rating' : forms.RadioSelect(attrs={'class':'rating-radio'}),  
-            'goodpoint_comment':forms.Textarea(attrs={"class":"form-control","rows":3}),
-            'badpoint_comment':forms.Textarea(attrs={"class":"form-control","rows":3}),
-        }
-       
+               
     #下書き用 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
         super().__init__(*args,**kwargs)
         
-        if self.data.get("action") =="draft":
-            for f in self.fields.values():
-                f.required = False
+    def clean(self):
+        cleaned = super().clean()
+        action = (self.data.get("action") or"").strip()        
+
+        rating_raw = (self.data.get("rating")or"").strip()
+        good_raw = (self.data.get("goodpoint_comment") or "").strip()
+        bad_raw  = (self.data.get("badpoint_comment") or "").strip()
+
+        #一時保存 どれか1つでも入っていればOK（全部空はNG）
+        if action == "draft":
+            if not rating_raw and not good_raw and not bad_raw:
+                raise ValidationError("一時保存は、評価・良い点・悪い点のいずれかを入力してください。")
+            return cleaned
+        
+        # 投稿　submit：3つすべて必須
+        if not rating_raw:
+            self.add_error("rating", "評価（★）を選択してください。")
+        if not good_raw:
+            self.add_error("goodpoint_comment", "良い点を入力してください。")
+        if not bad_raw:
+            self.add_error("badpoint_comment", "悪い点を入力してください。")
+        
+        # 20文字以上（フォームのmin_lengthでも弾くが、メッセージ統一したいならここでも）
+        if good_raw and len(good_raw) < 20:
+            self.add_error("goodpoint_comment", "良い点は20文字以上で入力してください。")
+        if bad_raw and len(bad_raw) < 20:
+            self.add_error("badpoint_comment", "悪い点は20文字以上で入力してください。")
+
+        return cleaned

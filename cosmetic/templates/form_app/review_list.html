@@ -11,62 +11,54 @@
     </a>
 </div>
 
-<div class="review-list">
-{% if reviews %}
-    {% for review in reviews %}
-        <div class="review-item">
+<div class="latest-review-area">
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review-card">
             
-            <div class="review-image">
-                {% if review.image %}
-                    <img src="{{ review.image.url }}" class="review-list-image">
-                {% elif review.product.image %}
-                    <img src="{{ review.product.image.url }}" class="review-list-image">
-                {% endif %}
-            </div>
+                <div class="review-image">
+                    {% if review.image %}
+                        <img src="{{ review.image.url }}" class="review-list-image">
+                    {% elif review.product.image %}
+                        <img src="{{ review.product.image.url }}" class="review-list-image">
+                    {% endif %}
+                </div>
 
-            <!--年代・肌質-->
-            <div class="review-body">
-                <h2>{{forloop.counter}}.  {{ review.product.cosme_name }}</h2>
+                <!--年代・肌質-->
+                <div class="review-body">
+                    <h2>{{forloop.counter}}.  {{ review.product.cosme_name }}</h2>
                 
-                <p class="review-date">
-                    {{ review.posted_at|date:"Y/m/d" }}
-                </p>
-
-                <p class="review-meta">
-                    {{ review.user.name }}
-                    ({{ review.get_skin_type_display }}/{{ review.get_age_display }})
-                </p>
-
-                {% if review.rating %}
-                    <p class="rating-stars">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}
-                                ★
-                            {% else %}
-                                ☆
-                            {% endif %}
-                        {% endfor %}
+                    <p class="review-date">
+                        {{ review.posted_at|date:"Y/m/d" }}
                     </p>
-                {% endif %}
 
-            <!--画像-->
-                <p><strong>良い点</strong>：{{ review.goodpoint_comment|truncatechars:50}}</p>
-                <p><strong>悪い点</strong>：{{ review.badpoint_comment|truncatechars:50}}</p>
-            <!--いいね-->
+                    <p class="review-meta">
+                        {{ review.user.name }}
+                        ({{ review.get_skin_type_display }}/{{ review.get_age_display }})
+                    </p>
 
-                <form 
-                    action="{% url 'form_app:review_delete' review.pk %}"
-                    method="post"
-                    onsubmit="return confirm('このレビューを削除します？');"
-                    >
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-secondary">削除</button>
-                </form>
+                    {% if review.rating %}
+                        <p class="rating-display">
+                            評価：{{ review.rating_stars }}
+                        </p>
+                    {% endif %}    
+
+                    <p><strong>良い点</strong>：{{ review.goodpoint_comment|truncatechars:50}}</p>
+                    <p><strong>悪い点</strong>：{{ review.badpoint_comment|truncatechars:50}}</p>
+
+                    <form 
+                        action="{% url 'form_app:review_delete' review.pk %}"
+                        method="post"
+                        onsubmit="return confirm('このレビューを削除します？');"
+                        >
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>レビューはまだありません</p>
-{% endif %}
+        {% endfor %}
+    {% else %}
+        <p>レビューはまだありません</p>
+    {% endif %}
 </div>
 {% endblock %}

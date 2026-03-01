@@ -4,51 +4,53 @@
 {% block body_class %}favorite-page{% endblock %}
 
 {% block content %}
-
 <h1 class="page-title">お気に入りレビュー一覧</h1>
 
-{% for fav in favorites %}
-    <div class="review-card">
-        <h3>
-            {{forloop.counter}}.{{fav.review.product.cosme_name}}
-        </h3>
+<div class="latest-review-area">
+    {% for fav in favorites %}
+        <div class="review-card">
 
-        {% if fav.review.product.image %}
-            <img src="{{ fav.review.product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
-        {% endif %}
-
-        <p class="review-user">
-            {{ fav.review.user.username }}さん
-            {% if fav.review.skin_type and fav.review.age %}
-                （{{ fav.review.get_skin_type_display }}／{{ fav.review.get_age_display }}）
-            {% endif %}
-            のレビュー
-        </p>
-
-        <p class="rating">
-            {% for i in "12345" %}
-                {% if forloop.counter <= fav.review.rating %}
-                    ★
-                {% else %}
-                    ☆
+            <!-- 左：画像 -->
+            <div class="review-image">
+                {% if fav.review.image %}
+                    <img src="{{ fav.review.image.url }}" class="mypage-review-image" alt="">
+                {% elif fav.review.product.image %}
+                    <img src="{{ fav.review.product.image.url }}" class="mypage-review-image" alt="">
                 {% endif %}
-            {% endfor %}
-            <span class="rating-number">
-                {{ fav.review.rating }}
-            </span>
-        </p>
-        
-        <p>良い点：{{ fav.review.goodpoint_comment|truncatechars:50 }}</p>
-        <p>悪い点：{{ fav.review.badpoint_comment|truncatechars:50 }}</p>
+            </div>
 
-        <form method="post" action="{% url 'form_app:review_favorite' fav.review.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-secondary ">削除</button>
-        </form>
+            <!-- 右：本文 -->
+            <div class="review-body">
+                <h3 class="review-title">{{ forloop.counter }}. {{ fav.review.product.cosme_name }}</h3>
 
-    </div>
-{% empty %}
-    <p>お気に入りはまだありません</p>
-{% endfor %}
+                <p class="meta">
+                    {{ fav.review.user.username }}さん
+                    {% if fav.review.skin_type and fav.review.age %}
+                        （{{ fav.review.get_skin_type_display }}／{{ fav.review.get_age_display }}）
+                    {% endif %}
+                    のレビュー
+                </p>
 
+                <p class="rating-display">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= fav.review.rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                    <span class="rating-number">{{ fav.review.rating }}</span>
+                </p>
+
+                <p><strong>良い点</strong><br>{{ fav.review.goodpoint_comment|truncatechars:50 }}</p>
+                <p><strong>悪い点</strong><br>{{ fav.review.badpoint_comment|truncatechars:50 }}</p>
+
+                <div class="card-actions">
+                    <form method="post" action="{% url 'form_app:review_favorite' fav.review.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>お気に入りはまだありません</p>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -17,9 +17,11 @@
         </div>
     </div>
 
-    {{ form.cosme_name.as_field_group }}
-    {{ form.category.as_field_group }}
-    {{ form.price.as_field_group }}
+    <div class="form-fields">
+        {{ form.cosme_name.as_field_group }}
+        {{ form.category.as_field_group }}
+        {{ form.price.as_field_group }}
+    </div>
 
     <div class="form-actions vertical">
         <button type="submit" class="btn btn-primary">登録</button>

@@ -26,55 +26,49 @@
                 <a href="{% url 'form_app:review_entry' %}?next={% url 'form_app:my_page' %}" class="btn  btn-secondary">✍レビュー投稿</a>
             </div>
 
-    <!--最新レビュー表示スペース-->
+            <!--最新レビュー表示スペース-->
             <div class="latest-review-area">
-
-
-    <!--レビュー一覧の表示-->
                 {% if reviews %}
                     {% for review in reviews %}
-                        <div class="review-item">
-                            <div class="review-image">
-                                {% if review.image %}
-                                    <img src="{{ review.image.url }}" class="mypage-review-image">
-                                {% elif review.product.image %}
-                                    <img src="{{ review.product.image.url }}" class="mypage-review-image">
-                                {% endif %}
-                            </div>
+                            <div class="review-card">
+                                <div class="review-image">
+                                    {% if review.image %}
+                                        <img src="{{ review.image.url }}" class="mypage-review-image">
+                                    {% elif review.product.image %}
+                                        <img src="{{ review.product.image.url }}" class="mypage-review-image">
+                                    {% endif %}
+                                </div>
                             
-                            <div class="review-body">
-                                <h3>{{ review.product.cosme_name }}</h3>
+                                <div class="review-body">
+                                    <h3>{{ review.product.cosme_name }}</h3>
                         
-                                <p class="review-date">
-                                    {{ review.posted_at|date:"Y/m/d" }}
-                                </p>
+                                    <p class="review-date">
+                                        {{ review.posted_at|date:"Y/m/d" }}
+                                    </p>
 
-                                （{{ review.get_skin_type_display }}／{{ review.get_age_display }}）<br>
+                                    （{{ review.get_skin_type_display }}／{{ review.get_age_display }}）<br>
 
-                                <p class="rating-stars">
-                                    {% for i in "12345" %}
-                                        {% if forloop.counter <= review.rating %}
-                                            ★
-                                        {% else %}
-                                            ☆
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
+                                    {% if review.rating %}
+                                        <p class="rating-display">
+                                            評価：{{ review.rating_stars }}
+                                        </p>
+                                    {% endif %}
 
-                                <p><strong>良い点</strong><br>
-                                    {{ review.goodpoint_comment|linebreaksbr }}
-                                </p>
+                                    <p><strong>良い点</strong><br>
+                                        {{ review.goodpoint_comment|linebreaksbr }}
+                                    </p>
 
-                                <p><strong>悪い点</strong><br>
-                                    {{ review.badpoint_comment|linebreaksbr }}
-                                </p>
+                                    <p><strong>悪い点</strong><br>
+                                        {{ review.badpoint_comment|linebreaksbr }}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
                     {% endfor %}
                 {% else %}
                     <p>まだ投稿したレビューはありません。</p>
                 {% endif %}
             </div>
+
         {% else %}
             <p>ログインしてください</p>
         {% endif %}

@@ -3,24 +3,23 @@
 {% block content %}
 <h1 class="page-title">商品一覧（運営用）</h1>
 
-<div class="admin-product-grid">
+<div class="product-grid">
   {% for product in products %}
-    <div class="admin-product-card">
-      <div class="admin-product-thumb">
-        {% if product.image %}
-          <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
-        {% endif %}
+    <div class="product-card">
+
+      {% if product.image %}
+        <img src="{{ product.image.url }}" class="product-image" alt="{{ product.cosme_name }}の商品画像">
+      {% endif %}
+
+      <div class="product-info">
+        <h3 class="product-name">商品名：{{ product.cosme_name }}</h3>
+        <p class="product-meta">
+          カテゴリー：{{ product.category }}<br>
+          価格（円）：￥{{ product.price }}
+        </p>
       </div>
 
-      <div class="admin-product-info">
-        <div class="admin-product-name">商品名：{{ product.cosme_name }}</div>
-        <div class="admin-product-meta">
-          <span class="admin-product-category">カテゴリー：{{ product.category }}</span>
-          <span class="admin-product-price">価格（円）：￥{{ product.price }}</span>
-        </div>
-      </div>
-
-      <div class="admin-product-buttons">
+      <div class="product-actions">
         <a href="{% url 'form_app:product_edit' product.id %}" class="btn btn-sm btn-secondary">編集</a>
 
         <form method="post" action="{% url 'form_app:product_delete' product.id %}"

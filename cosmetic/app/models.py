@@ -47,14 +47,15 @@ class Review(models.Model):
     age = models.CharField(max_length=10, choices=AGE_CHOICES, blank=True)
     skin_type = models.CharField(max_length=50, choices=SKIN_CHOICES, blank=True)
     
-    rating = models.IntegerField(
-        choices=[
-            (1,'☆☆☆☆★'),
-            (2,'☆☆☆★★'),
-            (3,'☆☆★★★'),
-            (4,'☆★★★★'),
-            (5,'★★★★★'),
-    ], null=True,blank=True)
+    RATING_CHOICES = [(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
+    
+    rating = models.IntegerField(choices=RATING_CHOICES, null=True, blank=True)
+    
+    @property
+    def rating_stars(self):
+        if not self.rating:
+            return ""
+        return "★" * self.rating + "☆" * (5 - self.rating)
     
     goodpoint_comment = models.TextField(blank=True)
     badpoint_comment = models.TextField(blank=True)
@@ -90,7 +91,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-    
+
 #レビューお気に入り
 class ReviewFavorite(models.Model):
     user = models.ForeignKey(

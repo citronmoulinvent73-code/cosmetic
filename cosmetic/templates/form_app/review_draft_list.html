@@ -2,64 +2,55 @@
 {% load static %}
 
 {% block content %}
+<h1 class="page-title">一時保存したレビュー</h1>
 
-    <h1 class="page-title">一時保存したレビュー</h1>
-
+<div class="latest-review-area">
     {% if drafts %}
-        <ul class="draft-list">
-            {% for draft in drafts %}
-                <li style="margin-bottom:16px;">
-                    <strong>{{ draft.product.cosme_name }}</strong><br>
-                    
-                    {% if draft.image %}
-                        <img src="{{ draft.image.url }}" class="draft-review-image">
-                    {% elif draft.product.image %}
-                        <img src="{{ draft.product.image.url }}" class="draft-review-image">
-                    {% endif %}
+        {% for draft in drafts %}
+            <div class="review-card">
 
-                   
+                <div class="review-image">
+                    {% if draft.image %}
+                        <img src="{{ draft.image.url }}" class="review-list-image" alt="">
+                    {% elif draft.product.image %}
+                        <img src="{{ draft.product.image.url }}" class="review-list-image" alt="">
+                    {% endif %}
+                </div>
+
+                <div class="review-body">
+                    <div class="review-header">
+                        <h3 class="review-title">{{ forloop.counter }}. {{ draft.product.cosme_name }}</h3>
+                    </div>
+
+                    <p class="review-date">保存日：{{ draft.created_at|date:"Y/m/d H:i" }}</p>
+
                     {% if draft.rating %}
-                        <p>評価：{{ draft.get_rating_display }}</p>
+                        <p class="rating-display">評価：{{ draft.rating_stars }}</p>
                     {% endif %}
 
                     {% if draft.goodpoint_comment %}
-                        <p>
-                            <strong>良い点</strong><br>
-                            {{ draft.goodpoint_comment|linebreaksbr }}
-                        </p>
+                        <p><strong>良い点</strong><br>{{ draft.goodpoint_comment|linebreaksbr }}</p>
                     {% endif %}
 
                     {% if draft.badpoint_comment %}
-                        <p>
-                            <strong>悪い点</strong><br>
-                            {{ draft.badpoint_comment|linebreaksbr }}
-                        </p>
+                        <p><strong>悪い点</strong><br>{{ draft.badpoint_comment|linebreaksbr }}</p>
                     {% endif %}
 
-                    保存日：{{ draft.created_at|date:"Y/m/d H:i" }}<br>
-                    
+                    <div class="card-actions">
+                        <a href="{% url 'form_app:review_draft_edit' draft.id %}" class="btn btn-sm btn-secondary">編集</a>
 
-                    <div class="draft-actions">
-                        <a href="{% url 'form_app:review_draft_edit' draft.id %}" class="btn btn-sm btn-secondary">
-                            編集
-                        </a>
-                    
-                        <form 
-                            action ="{% url 'form_app:review_draft_delete' draft.id %}"
+                        <form action="{% url 'form_app:review_draft_delete' draft.id %}"
                             method="post"
-                            onsubmit="return confirm('この下書きを削除しますか？');"
-                            style="display:inline;"
-                            >
-                        
+                            onsubmit="return confirm('この下書きを削除しますか？');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-secondary">削除</button>
                         </form>
                     </div>
-                </li>
-            {% endfor %}
-        </ul>
+                </div>
+            </div>
+        {% endfor %}
     {% else %}
         <p>一時保存したレビューはありません。</p>
     {% endif %}
-
+</div>
 {% endblock %}
