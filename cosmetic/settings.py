@@ -55,7 +55,7 @@ MIDDLEWARE = [
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-    
+
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
@@ -65,7 +65,7 @@ ROOT_URLCONF = 'cosmetic.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'cosmetic' / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
