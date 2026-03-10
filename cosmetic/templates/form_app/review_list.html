@@ -6,7 +6,8 @@
 <h1 class="page-title">{{ user.username }}さんのレビュー一覧</h1>
 
 <div class="review-actions">
-    <a href ="{% url 'form_app:review_entry' %}" class=" btn btn-secondary">
+    <a href ="{% url 'form_app:review_entry' %}" 
+        class=" btn btn-secondary js-once-link">
         ✍レビュー投稿
     </a>
 </div>
@@ -46,14 +47,20 @@
                     <p><strong>良い点</strong>：{{ review.goodpoint_comment|truncatechars:50}}</p>
                     <p><strong>悪い点</strong>：{{ review.badpoint_comment|truncatechars:50}}</p>
 
-                    <form 
-                        action="{% url 'form_app:review_delete' review.pk %}"
-                        method="post"
-                        onsubmit="return confirm('このレビューを削除します？');"
-                        >
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+                    <form method="post" 
+                            action="{% url 'form_app:review_delete' review.pk %}"
+                            id="delete-review-{{ review.pk }}">
+                        {% csrf_token %}      
+
+                        <button type="button" 
+                                class="btn btn-sm btn-secondary js-confirm"
+                                data-form="delete-review-{{ review.pk }}"
+                                data-message="本当に削除しますか？"
+                                data-confirm="削除">
+                            削除
+                        </button>
                     </form>
+                    
                 </div>
             </div>
         {% endfor %}
@@ -61,4 +68,5 @@
         <p>レビューはまだありません</p>
     {% endif %}
 </div>
+
 {% endblock %}

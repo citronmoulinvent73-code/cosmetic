@@ -20,12 +20,22 @@
       </div>
 
       <div class="product-actions">
-        <a href="{% url 'form_app:product_edit' product.id %}" class="btn btn-sm btn-secondary">編集</a>
+        <form method="get" action="{% url 'form_app:product_edit' product.id %}">
+          <button type="submit" class="btn btn-sm btn-secondary">編集</button>
+        </form>
 
-        <form method="post" action="{% url 'form_app:product_delete' product.id %}"
-        onsubmit="return confirm('このレビューを削除します？');">
+        <form method="post" 
+              action="{% url 'form_app:product_delete' product.id %}"
+              id="delete-product-{{ product.id }}">
           {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+
+          <button type="button" 
+                  class="btn btn-sm btn-secondary js-confirm"
+                  data-form="delete-product-{{ product.id }}"
+                  data-message="本当に削除しますか？"
+                  data-confirm="削除">
+            削除
+          </button>
         </form>
       </div>
       

@@ -5,10 +5,11 @@
 
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
 
     <div class="section">
         <p>ユーザー名：{{ user_form.username.value }}<br><small>※修正不可</small></p>
-        <p>メールアドレス：{{ user_form.email.value }}<br><small>※修正不可</small></p>
+        <p>メールアドレス：{{ user_form.email }}</p>
     </div>
 
     <div class="section">
@@ -19,7 +20,7 @@
 
     <div class="form-actions vertical">
         <button type="submit" class="btn btn-primary">保存</button>
-        <a href="{{ request.GET.next|default:'/' }}" class="link-cancel">キャンセル</a>
+        <a href="{{ next|default:'/' }}" class="link-cancel">キャンセル</a>
     </div>
     
 </form>

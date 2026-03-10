@@ -16,20 +16,26 @@
          
     <!--上段-->
         <div class="button-list admin-top">
-            <a href="{% url 'form_app:edit_profile' %}?next={% url 'form_app:admin_my_page' %}" class="btn btn-secondary">👤登録情報の修正</a>
-            <a href="{% url 'form_app:password_change' %}?next={% url 'form_app:admin_my_page' %}" class="btn btn-secondary">🔒パスワード変更</a>
+            <a href="{% url 'form_app:edit_profile' %}?next={% url 'form_app:admin_my_page' %}" 
+                class="btn btn-secondary js-once-link">👤登録情報の修正</a>
+            <a href="{% url 'form_app:password_change' %}?next={% url 'form_app:admin_my_page' %}" 
+                class="btn btn-secondary js-once-link">🔒パスワード変更</a>
         </div>
 
     <!--中段-->
         <div class="button-list admin-middle">
-            <a href="{% url 'form_app:product_create' %}" class="btn btn-secondary">💄コスメ登録（運営）</a>
-            <a href="{% url 'form_app:product_list' %}" class="btn btn-secondary">商品一覧（運営）</a>
+            <a href="{% url 'form_app:product_create' %}" 
+                class="btn btn-secondary js-once-link">💄コスメ登録（運営）</a>
+            <a href="{% url 'form_app:product_list' %}" 
+                class="btn btn-secondary js-once-link">商品一覧（運営）</a>
         </div>
 
     <!--下段-->
         <div class="button-list admin-bottom">
-            <a href="{% url 'form_app:review_list' %}" class="btn btn-secondary">📖レビュー一覧</a>
-            <a href="{% url 'form_app:review_entry' %}?next={% url 'form_app:admin_my_page' %}" class="btn btn-secondary">✍レビュー投稿</a>
+            <a href="{% url 'form_app:review_list' %}" 
+                class="btn btn-secondary js-once-link">📖レビュー一覧</a>
+            <a href="{% url 'form_app:review_entry' %}?next={% url 'form_app:admin_my_page' %}" 
+                class="btn btn-secondary js-once-link">✍レビュー投稿</a>
         </div>
 
         <!--最新レビュー表示スペース-->

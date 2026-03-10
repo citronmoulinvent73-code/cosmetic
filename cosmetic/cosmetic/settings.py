@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-t)=*ajrubq(6g#_itcdz90nyk!+%4z)549)$a7)sqaio_!p*&x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #本番環境ではFalseに修正
+DEBUG = True #本番環境ではFalse
 
 ALLOWED_HOSTS = [
     'miharu.pythonanywhere.com',
     'localhost',
-    '127.0.0.1',
+    '127.0.0.1','192.168.0.8'
 ]
 
 

@@ -36,7 +36,8 @@
 
         <div class="review-header">
             {% if user.is_authenticated %}
-                <a href ="{% url 'form_app:review_entry' %}" class="btn btn-secondary">
+                <a href ="{% url 'form_app:review_entry' %}" 
+                    class="btn btn-secondary js-once-link">
                     ✍レビュー投稿
                 </a>
             {% endif %}

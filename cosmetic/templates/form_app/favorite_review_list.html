@@ -42,9 +42,17 @@
                 <p><strong>悪い点</strong><br>{{ fav.review.badpoint_comment|truncatechars:50 }}</p>
 
                 <div class="card-actions">
-                    <form method="post" action="{% url 'form_app:review_favorite' fav.review.id %}">
+                    <form method="post" 
+                            action="{% url 'form_app:review_favorite' fav.review.id %}"
+                            id="unfavorite-review-{{ fav.review.id }}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+                        <button type="button" 
+                                class="btn btn-sm btn-outline-danger js-confirm"
+                                data-form="unfavorite-review-{{ fav.review.id }}"
+                                data-message="お気に入りを解除しますか？"
+                                data-confirm="解除">
+                            お気に入り解除
+                        </button>
                     </form>
                 </div>
             </div>

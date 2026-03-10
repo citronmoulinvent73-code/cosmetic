@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import login as auth_login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.db.models import Count, Avg, Q, Exists, OuterRef, IntegerField, Value, BooleanField
@@ -9,7 +12,7 @@ from django.db.models.functions import Cast, Round
 from django.core.exceptions import PermissionDenied
 from functools import wraps
 
-from .forms import LoginForm, UserForm, CosmeForm, ReviewForm, UserReadOnlyForm, ProfileForm
+from .forms import LoginForm, UserForm, CosmeForm, ReviewForm, UserEditForm, ProfileForm, CustomPasswordChangeForm
 from .models import Product, Review, ReviewFavorite, Profile, SKIN_CHOICES, AGE_CHOICES
 
 
@@ -255,9 +258,6 @@ def admin_my_page(request):
     })
 
 
-
-
-
 #商品登録
 @staff_required
 def product_create(request):
@@ -327,11 +327,32 @@ def review_create(request, product_id):
         is_draft=False
     )
     
+    my_review = Review.objects.filter(
+        user=request.user,
+        product=product,
+        is_draft=False
+    ).order_by("-posted_at").first()
+    
+    
     if request.method == "POST":
-        action = request.POST.get("action")
+        if "save_draft" in request.POST:
         
         #下書き
-        if action == "draft":
+            good_raw = request.POST.get("goodpoint_comment", "").strip()
+            bad_raw = request.POST.get("badpoint_comment", "").strip()
+            rating_raw = (request.POST.get("rating") or "").strip()
+            image_file = request.FILES.get("image")
+
+            # 全部空なら保存しない
+            if not any([good_raw, bad_raw, rating_raw, image_file]):
+                form = ReviewForm(request.POST, request.FILES, instance=draft, request=request)
+                form.add_error(None, "一時保存するには、評価・良い点・悪い点・画像のいずれかを入力してください。")
+                return render(request, "form_app/review_create.html", {
+                    "form": form,
+                    "product": product,
+                    "reviews": reviews,
+                })
+            
             #一時保存（is_valid通さない）
             review = draft if draft else Review()
             review.user =request.user
@@ -340,18 +361,16 @@ def review_create(request, product_id):
             review.skin_type = profile.skin_type or ""
             review.age = profile.age or ""
                        
-            review.goodpoint_comment = request.POST.get("goodpoint_comment","")
-            review.badpoint_comment = request.POST.get("badpoint_comment","")
+            review.goodpoint_comment = good_raw
+            review.badpoint_comment = bad_raw
             
-            if request.FILES.get("image"):
-                review.image = request.FILES["image"]
+            if image_file:
+                review.image = image_file
 
-            #未選択OK
-            r = request.POST.get("rating")
-            review.rating = int(r) if r else None
-            
+            review.rating = int(rating_raw) if rating_raw else None
             review.is_draft = True
             review.save()
+                
             if request.user.is_staff:
                 return redirect("form_app:admin_my_page")
             else:
@@ -380,6 +399,7 @@ def review_create(request, product_id):
         "form":form,
         "product":product,
         "reviews":reviews,
+        "my_review":my_review,
     })            
     
     
@@ -417,18 +437,15 @@ def review_draft_edit(request, pk):
     )
     
     if request.method == "POST":
-        form =ReviewForm(request.POST, request.FILES, instance=review, request=request)
         
-        action = request.POST.get("action")
-        
-        # ★ まずクリア処理（returnより前）
+        # ★ まずクリア処理
         if request.POST.get("image-clear") == "on":
             if review.image:
                 review.image.delete(save=False)  # ファイル削除
             review.image = None                  # DB参照を空に
         
         #下書き保存はバリエーション通さず
-        if action =="draft":
+        if "save_draft" in request.POST:
             review.goodpoint_comment = request.POST.get("goodpoint_comment","")
             review.badpoint_comment = request.POST.get("badpoint_comment","")
             review.rating = request.POST.get("rating") or None
@@ -508,24 +525,45 @@ def review_edit(request, review_id):
 @login_required
 def edit_profile(request): #プロフィール修正    
     profile, _ = Profile.objects.get_or_create(user=request.user)
+    next_url = request.GET.get("next") or request.POST.get("next")
     
     if request.method == "POST":
+        user_form = UserEditForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=profile)
         
-        if profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()    
             profile_form.save()    
-            return redirect("form_app:my_page")
+            return redirect(next_url or "form_app:my_page")
         
     else:
+        user_form = UserEditForm(instance=request.user)
         profile_form = ProfileForm(instance=profile)
-    
-    user_form = UserReadOnlyForm(instance=request.user)
-    
+        
     return render(request, "form_app/edit_profile.html",{
         "user_form":user_form,
-        "profile_form":profile_form,})
+        "profile_form":profile_form,
+        "next":next_url,
+        })
  
+
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    template_name = "form_app/password_change.html"
+    form_class = CustomPasswordChangeForm
+
+    def get_success_url(self):
+        return (
+            self.request.POST.get("next")
+            or self.request.GET.get("next")
+            or reverse_lazy("form_app:my_page")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["next"] = self.request.GET.get("next") or self.request.POST.get("next")
+        return context
     
+
 #レビュー投稿    
 @login_required
 def review_success(request):

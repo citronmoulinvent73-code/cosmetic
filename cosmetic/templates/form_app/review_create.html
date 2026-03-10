@@ -6,7 +6,8 @@
 <div class="review-header">
     <h1 class="page-title">レビュー投稿</h1>
 
-    <a href = "{% url 'form_app:review_draft_list' %}" class="btn btn-secondary">
+    <a href = "{% url 'form_app:review_draft_list' %}"
+     class="btn btn-secondary js-once-link">
         💾一時保存したレビュー
     </a>
 </div>
@@ -23,8 +24,38 @@
     </div>
 </div>
 
-<form method="post" enctype="multipart/form-data">
+
+{% if my_review %}
+<div class="my-review-area">
+<h2>あなたの最新レビュー</h2>
+
+<p>{{ my_review.posted_at|date:"Y/m/d" }}</p>
+
+<p><strong>評価：</strong><br>
+<p>{{ my_review.rating_stars }}</p>
+
+<p><strong>良い点：</strong><br>
+{{ my_review.goodpoint_comment|linebreaksbr }}
+</p>
+
+<p><strong>悪い点：</strong><br>
+{{ my_review.badpoint_comment|linebreaksbr }}
+</p>
+
+<hr>
+
+</div>
+{% endif %}
+
+
+<form method="post" enctype="multipart/form-data" class="js-disable-on-submit">
     {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="nonfield_errors">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
 
     <div class="rating-container">
         <span class="rating-label">評価：</span>      
@@ -54,48 +85,48 @@
             </div>
         {% endif %}
 
-  <!-- 変更欄 -->
-    <div class="change-image">
-        <div class="change-label">
-            画像を選択<br>
-            {{ form.image.errors }}
-            {{ form.image }}
-            <img id="preview" class="preview hidden" alt="新しい画像プレビュー">
+        <!-- 変更欄 -->
+        <div class="change-image">
+            <div class="change-label">
+                画像を選択<br>
+                {{ form.image.errors }}
+                {{ form.image }}
+                <img id="preview" class="preview hidden" alt="新しい画像プレビュー">
+            </div>
         </div>
-    </div>
   
-    <p>
-        <label>良い点：</label><br>
-        {{ form.goodpoint_comment.errors }}
-        {{ form.goodpoint_comment }}
-    </p>
+        <p>
+            <label>良い点：</label><br>
+            {{ form.goodpoint_comment.errors }}
+            {{ form.goodpoint_comment }}
+        </p>
 
-    <p>
-        <label>悪い点：</label><br>
-        {{ form.badpoint_comment.errors }}
-        {{ form.badpoint_comment }}
-    </p>
+        <p>
+            <label>悪い点：</label><br>
+            {{ form.badpoint_comment.errors }}
+            {{ form.badpoint_comment }}
+        </p>
 
-
-    <div class="submit-actions">
-        <button type="submit" name="action" value="submit" class="btn-submit">
-            投稿
-        </button>
+        <div class="submit-actions">
+            <button type="submit" name="submit_review" value="1" class="btn-submit">
+                投稿
+            </button>
     
-        <div class="submit-links">
-            {% if request.user.is_staff %}
-                <a href="{% url 'form_app:admin_my_page' %}" class="link-cancel">
-                    キャンセル
-                </a>
-            {% else %}
-                <a href="{% url 'form_app:my_page' %}" class="link-cancel">
-                    キャンセル
-                </a>
-            {% endif %}
+            <div class="submit-links">
+                {% if request.user.is_staff %}
+                    <a href="{% url 'form_app:admin_my_page' %}" class="link-cancel">
+                        キャンセル
+                    </a>
+                {% else %}
+                    <a href="{% url 'form_app:my_page' %}" class="link-cancel">
+                        キャンセル
+                    </a>
+                {% endif %}
 
-            <button type="submit" name="action" value="draft" class="link-draft">
-                一時保存
-            </button> 
+                <button type="submit" name="save_draft" value="1" class="link-draft" formnovalidate>
+                    一時保存
+                </button> 
+            </div>
         </div>
     </div>
 </form>
@@ -122,6 +153,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
         preview.src = URL.createObjectURL(file);
         preview.classList.remove("hidden");
+    });
+});
+</script>
+
+<script>
+document.querySelectorAll(".js-disable-on-submit").forEach(form => {
+    let submitting = false;
+
+    form.addEventListener("submit", (e) => {
+        if (submitting) {
+            e.preventDefault();
+            return;
+        }
+
+        const clickedBtn = e.submitter;
+        if (!clickedBtn) return;
+
+        submitting = true;
+
+        form.querySelectorAll("button[type='submit']").forEach(btn => {
+            if (btn !== clickedBtn) {
+                btn.disabled = true;
+                btn.style.opacity = "0.6";
+            }
+        });
+
+        clickedBtn.style.pointerEvents = "none";
+        clickedBtn.style.opacity = "0.6";
+
+        if (clickedBtn.name === "save_draft") {
+            clickedBtn.textContent = "保存中...";
+        } else {
+            clickedBtn.textContent = "送信中...";
+        }
     });
 });
 </script>

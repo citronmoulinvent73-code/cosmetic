@@ -107,17 +107,21 @@ class LoginForm(AuthenticationForm):
         return self.cleaned_data
 
        
-#登録情報フォーム（表示のみ・修正不可）
-class UserReadOnlyForm(forms.ModelForm):
+#登録情報フォーム（ユーザー名は表示のみ・メールアドレスは修正可）
+class UserEditForm(AddFormInputClassMixin, forms.ModelForm):
     class Meta:
         model = User
         fields = ("username", "email")
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.disabled = True
-
+        
+        self.fields["username"].disabled = True
+        self.fields["email"].label = "メールアドレス"
+        
+        self.add_form_input_class()
+        
+        
 #登録情報フォーム'(編集可)
 class ProfileForm(AddFormInputClassMixin, forms.ModelForm):
     class Meta:
@@ -174,9 +178,6 @@ class CosmeForm(AddFormInputClassMixin,CosmeCreateForm):
 
 
 class ReviewForm(forms.ModelForm):
-    #RATTING_CHOICES = [(1,'★☆☆☆☆'),(2,'★★☆☆☆'),(3,'★★★☆☆'),(4,'★★★★☆'),(5,'★★★★★'),]
-    #rating = forms.TypedChoiceField(choices=RATTING_CHOICES,coerce=int,required=False)
-
     goodpoint_comment = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={"rows": 3}),
@@ -200,18 +201,19 @@ class ReviewForm(forms.ModelForm):
         
     def clean(self):
         cleaned = super().clean()
-        action = (self.data.get("action") or"").strip()        
+                
+        is_draft = "save_draft" in self.data
 
         rating_raw = (self.data.get("rating")or"").strip()
         good_raw = (self.data.get("goodpoint_comment") or "").strip()
         bad_raw  = (self.data.get("badpoint_comment") or "").strip()
 
-        #一時保存 どれか1つでも入っていればOK（全部空はNG）
-        if action == "draft":
+        # 一時保存
+        if is_draft:
             if not rating_raw and not good_raw and not bad_raw:
                 raise ValidationError("一時保存は、評価・良い点・悪い点のいずれかを入力してください。")
             return cleaned
-        
+
         # 投稿　submit：3つすべて必須
         if not rating_raw:
             self.add_error("rating", "評価（★）を選択してください。")

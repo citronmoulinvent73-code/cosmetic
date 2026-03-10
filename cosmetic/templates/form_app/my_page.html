@@ -16,14 +16,18 @@
 
     <!--中段-->
             <div class="button-list middle">
-                <a href="{% url 'form_app:edit_profile' %}?next={% url 'form_app:my_page' %}" class="btn btn-secondary">👤登録情報の修正</a>
-                <a href="{% url 'form_app:password_change' %}?next={% url 'form_app:my_page' %}" class="btn btn-secondary">🔒パスワード変更</a>
+                <a href="{% url 'form_app:edit_profile' %}?next={% url 'form_app:my_page' %}" 
+                    class="btn btn-secondary js-once-link">👤登録情報の修正</a>
+                <a href="{% url 'form_app:password_change' %}?next={% url 'form_app:my_page' %}" 
+                    class="btn btn-secondary js-once-link">🔒パスワード変更</a>
             </div>
 
     <!--下段-->
             <div class="button-list bottom">
-                <a href="{% url 'form_app:review_list' %}" class="btn btn-secondary">📖レビュー一覧</a>
-                <a href="{% url 'form_app:review_entry' %}?next={% url 'form_app:my_page' %}" class="btn  btn-secondary">✍レビュー投稿</a>
+                <a href="{% url 'form_app:review_list' %}" 
+                    class="btn btn-secondary js-once-link">📖レビュー一覧</a>
+                <a href="{% url 'form_app:review_entry' %}?next={% url 'form_app:my_page' %}" 
+                    class="btn  btn-secondary js-once-link">✍レビュー投稿</a>
             </div>
 
             <!--最新レビュー表示スペース-->

@@ -68,6 +68,7 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.product.cosme_name}のレビュー"
 
+
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,

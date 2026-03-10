@@ -37,13 +37,15 @@
                     {% endif %}
 
                     <div class="card-actions">
-                        <a href="{% url 'form_app:review_draft_edit' draft.id %}" class="btn btn-sm btn-secondary">編集</a>
-
+                        <form method="get" action="{% url 'form_app:review_draft_edit' draft.id %}">
+                            <button type="submit" class="btn btn-sm btn-secondary">編集</button>
+                        </form>
+                        
                         <form action="{% url 'form_app:review_draft_delete' draft.id %}"
                             method="post"
                             onsubmit="return confirm('この下書きを削除しますか？');">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-secondary">削除</button>
+                            <button type="submit" class="btn btn-sm btn-secondary js-once-link">削除</button>
                         </form>
                     </div>
                 </div>
