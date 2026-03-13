@@ -40,13 +40,21 @@
                         <form method="get" action="{% url 'form_app:review_draft_edit' draft.id %}">
                             <button type="submit" class="btn btn-sm btn-secondary">編集</button>
                         </form>
-                        
-                        <form action="{% url 'form_app:review_draft_delete' draft.id %}"
-                            method="post"
-                            onsubmit="return confirm('この下書きを削除しますか？');">
+
+                        <form method="post"
+                            action="{% url 'form_app:review_draft_delete' draft.id %}"
+                            id="delete-draft-{{ draft.id }}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-secondary js-once-link">削除</button>
+
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger js-confirm"
+                                    data-form="delete-draft-{{ draft.id }}"
+                                    data-message="本当に削除しますか？"
+                                    data-confirm="削除">
+                                削除
+                            </button>
                         </form>
+                        
                     </div>
                 </div>
             </div>

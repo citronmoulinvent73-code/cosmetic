@@ -27,23 +27,28 @@
 
 {% if my_review %}
 <div class="my-review-area">
-<h2>あなたの最新レビュー</h2>
+    <h2>あなたの最新レビュー</h2>
 
-<p>{{ my_review.posted_at|date:"Y/m/d" }}</p>
+    <div class="latest-review-card">
+        {% if my_review.image %}
+            <div class="latest-review-image-wrap">
+                <img src="{{ my_review.image.url }}" alt="最新レビュー画像" class="latest-review-image">
+            </div>
+        {% endif %}
 
-<p><strong>評価：</strong><br>
-<p>{{ my_review.rating_stars }}</p>
+        <p><strong>評価：</strong><br>
+        <p>{{ my_review.rating_stars }}</p>
 
-<p><strong>良い点：</strong><br>
-{{ my_review.goodpoint_comment|linebreaksbr }}
-</p>
+        <p><strong>良い点：</strong><br>
+        {{ my_review.goodpoint_comment|linebreaksbr }}
+        </p>
 
-<p><strong>悪い点：</strong><br>
-{{ my_review.badpoint_comment|linebreaksbr }}
-</p>
+        <p><strong>悪い点：</strong><br>
+        {{ my_review.badpoint_comment|linebreaksbr }}
+        </p>
 
-<hr>
-
+        <p>{{ my_review.posted_at|date:"Y/m/d" }}</p>
+    </div>
 </div>
 {% endif %}
 
@@ -58,7 +63,9 @@
     {% endif %}
 
     <div class="rating-container">
-        <span class="rating-label">評価：</span>      
+        <span class="form-item-label">
+            評価：<span class="required-label">必須項目</span>
+        </span>      
 
         <div class="rating-error">
             {{ form.rating.errors }}
@@ -87,8 +94,8 @@
 
         <!-- 変更欄 -->
         <div class="change-image">
-            <div class="change-label">
-                画像を選択<br>
+            <div class="form-item-label">
+                画像を選択<span class="optional-label">任意項目</span><br>
                 {{ form.image.errors }}
                 {{ form.image }}
                 <img id="preview" class="preview hidden" alt="新しい画像プレビュー">
@@ -96,13 +103,19 @@
         </div>
   
         <p>
-            <label>良い点：</label><br>
+            <span class="form-item-label">
+                良い点：<span class="required-label">必須項目</span><br>
+                <small class="help">※投稿には20文字以上入力してください</small>
+            </span><br>
             {{ form.goodpoint_comment.errors }}
             {{ form.goodpoint_comment }}
         </p>
 
         <p>
-            <label>悪い点：</label><br>
+            <span class="form-item-label">
+                悪い点：<span class="required-label">必須項目</span><br>
+                <small class="help">※投稿には20文字以上入力してください</small>
+            </span><br>
             {{ form.badpoint_comment.errors }}
             {{ form.badpoint_comment }}
         </p>
