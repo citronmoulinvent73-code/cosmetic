@@ -47,11 +47,11 @@ class UserForm(AddFormInputClassMixin,UserCreationForm):
         self.label_suffix = "" #コロンの削除
         
         self.fields["username"].label = "ユーザー名"
-        self.fields["username"].help_text = "4文字以上20文字以下"
+        self.fields["username"].help_text = "4文字以上20文字以下で設定してください<br>※修正不可"
         self.fields["username"].min_length = 4
         self.fields["username"].max_length = 20
     
-        self.fields["email"].help_text = "最大200文字"
+        self.fields["email"].help_text = "最大200文字で入力してください"
         self.fields["email"].max_length = 200
 
         self.fields["password1"].label = "パスワード"

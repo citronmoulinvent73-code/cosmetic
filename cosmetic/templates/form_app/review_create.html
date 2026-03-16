@@ -30,7 +30,7 @@
     <h2>あなたの最新レビュー</h2>
 
     <div class="latest-review-card">
-        {% if my_review.image %}
+        {% if my_review.image and my_review.image.name%}
             <div class="latest-review-image-wrap">
                 <img src="{{ my_review.image.url }}" alt="最新レビュー画像" class="latest-review-image">
             </div>

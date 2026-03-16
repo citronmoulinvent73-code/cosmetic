@@ -12,10 +12,12 @@
 
             <!-- 左：画像 -->
             <div class="review-image">
-                {% if fav.review.image %}
-                    <img src="{{ fav.review.image.url }}" class="mypage-review-image" alt="">
+                {% if fav.review.image and fav.review.image.name %}
+                    <img src="{{ fav.review.image.url }}" class="review-list-image" alt="レビュー画像">
                 {% elif fav.review.product.image %}
-                    <img src="{{ fav.review.product.image.url }}" class="mypage-review-image" alt="">
+                    <img src="{{ fav.review.product.image.url }}" class="review-list-image" alt="商品画像">
+                {% else %}
+                    <div class="no-image">No Image</div>
                 {% endif %}
             </div>
 

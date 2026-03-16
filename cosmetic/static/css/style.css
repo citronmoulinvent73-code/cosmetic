@@ -586,6 +586,19 @@ input[type="file"].form-input::-webkit-file-upload-button{
   margin-top: 8px;
 }
 
+.no-image{
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f7f7f7;
+  color: #777;
+  font-size: 14px;
+}
+
 /* クリアを横に並べる */
 label[for="image-clear_id"]{
   display: inline-block;
@@ -676,7 +689,7 @@ label[for="image-clear_id"]{
 
 /* 文字がはみ出ない（超重要） */
 .review-card,
-.review-card *{
+.review-card {
   overflow-wrap: anywhere;   /* 長い英数字も折り返す */
   word-break: break-word;
 }

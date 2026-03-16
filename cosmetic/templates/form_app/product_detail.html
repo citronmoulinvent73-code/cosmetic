@@ -33,10 +33,12 @@
                 <div class="review-card">
 
                     <div class="review-image">
-                        {% if review.image %}
-                            <img src="{{ review.image.url }}" class="mypage-review-image" alt="レビュー画像">
-                        {% elif product.image %}
-                            <img src="{{ product.image.url }}" class="mypage-review-image" alt="商品画像">
+                        {% if review.image and review.image.name %}
+                            <img src="{{ review.image.url }}" class="review-list-image" alt="レビュー画像">
+                        {% elif review.product.image %}
+                            <img src="{{ review.product.image.url }}" class="review-list-image" alt="商品画像">
+                        {% else %}
+                            <div class="no-image">No Image</div>
                         {% endif %}
                     </div>
         
