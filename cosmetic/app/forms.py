@@ -140,16 +140,21 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
         self.fields["old_password"].widget.attrs.update({
             "class": "form-input",
-            "placeholder": "現在のパスワード"
+            "placeholder": "現在のパスワード",
         })
+        self.fields["old_password"].error_messages["required"] = "現在のパスワードを入力してください。"
+        
         self.fields["new_password1"].widget.attrs.update({
             "class": "form-input",
             "placeholder": "新しいパスワード"
         })
+        self.fields["new_password1"].error_messages["required"] = "新しいパスワードを入力してください。"
+        
         self.fields["new_password2"].widget.attrs.update({
             "class": "form-input",
             "placeholder": "新しいパスワード（確認用）"
         })
+        self.fields["new_password2"].error_messages["required"] = "確認のため再度入力してください。"
         
 
 #管理画面
@@ -160,6 +165,7 @@ class CosmeCreateForm(forms.ModelForm):
 
 class CosmeForm(AddFormInputClassMixin,CosmeCreateForm):    
     CATEGORY_CHOICES = (
+        ('', '選択してください'),
         ('skincare', 'スキンケア'),
         ('uvcare','ＵＶケア'),
         ('basemake', 'ベースメイク'),
@@ -169,7 +175,32 @@ class CosmeForm(AddFormInputClassMixin,CosmeCreateForm):
         ('other', 'その他'),
     )
     
-    category = forms.ChoiceField(label='カテゴリー', choices=CATEGORY_CHOICES)
+    image = forms.ImageField(
+        label='画像',
+        required=True,
+        error_messages={
+            'required': '画像を選択してください。'
+        })
+    cosme_name = forms.CharField(
+        label='商品名',
+        required=True,
+        error_messages={
+            'required': '商品名を入力してください。'
+        })
+    category = forms.ChoiceField(
+        label='カテゴリー', 
+        choices=CATEGORY_CHOICES, 
+        required=True,
+        error_messages={
+            'required': 'カテゴリーを選択してください。'
+        }
+        )
+    price = forms.IntegerField(
+        label='価格',
+        required=True,
+        error_messages={
+            'required': '価格を入力してください。'
+        })
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -487,22 +487,31 @@ input[type="file"].form-input::-webkit-file-upload-button{
   flex-shrink: 0;
 }
 
-.file-row label{
-  display: block;
-  margin-bottom: 4px;
+/* Cosme登録 */
+.cosme-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
-.file-row .image-upload{
-  display: block;
-  margin-top: 0;
-  margin-bottom: 16px;
+.cosme-file-row{
+  margin-top:12px;
+  margin-bottom:16px;
 }
 
-.file-row input[type="file"]{
-  padding: 0;
-  line-height: 1.2;
+.cosme-file-row label{
+  display:block;
+  margin-bottom:4px;
 }
 
+
+/* パスワード変更 */
+.password-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:22px;
+}
 
 .my-review-area{
   margin: 24px 0;

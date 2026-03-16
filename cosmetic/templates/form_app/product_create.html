@@ -4,23 +4,39 @@
 {% block content %}
 <h1 class="page-title">コスメ登録（運営用）</h1>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-row file-row">
-        <label>画像</label>
+<p class="required-label">画像・商品名・カテゴリー・価格はすべて必須です。</p>
 
-        <!--レビューの画像選択-->
-        <div class="image-upload">
-            {{ form.image.errors }}
-            {{ form.image }}
-            <img id="preview" class="preview hidden" alt="プレビュー">
-        </div>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <div class="cosme-file-row">
+        <label for="{{ form.image.id_for_label }}">画像</label>
+        {{ form.image }}
+        {{ form.image.errors }}
+        <img id="preview" class="preview hidden" alt="プレビュー">
     </div>
 
     <div class="form-fields">
-        {{ form.cosme_name.as_field_group }}
-        {{ form.category.as_field_group }}
-        {{ form.price.as_field_group }}
+        <div class="cosme-field">
+            <label for="{{ form.image.id_for_label }}">{{ form.cosme_name.label }}</label>
+            {{ form.cosme_name }}
+            {{ form.cosme_name.errors }}
+        </div>
+
+        <div class="cosme-field">
+            <label for="{{ form.image.id_for_label }}">{{ form.category.label }}</label>
+            {{ form.category }}
+            {{ form.category.errors }}
+        </div>
+
+        <div class="cosme-field">
+            <label for="{{ form.image.id_for_label }}">{{ form.price.label }}</label>
+            {{ form.price }}
+            {{ form.price.errors }}
+        </div>
     </div>
 
     <div class="form-actions vertical">
